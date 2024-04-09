@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -27,6 +28,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'login',
         'name',
         'email',
         'password',
@@ -69,5 +71,18 @@ class User extends Authenticatable
     public function messages(): MorphMany
     {
         return $this->morphMany(Message::class, 'recipent');
+    }
+
+    public function messagesRead(): BelongsToMany
+    {
+        return $this->belongsToMany(Message::class, 'message_read');
+    }
+
+    public function allTeams()
+    {
+        return $this->ownedTeams()
+            ->where('personal_team', false)
+            ->get()->merge($this->teams)
+            ->sortBy('name');
     }
 }

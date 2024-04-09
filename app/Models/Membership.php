@@ -12,4 +12,13 @@ class Membership extends JetstreamMembership
      * @var bool
      */
     public $incrementing = true;
+
+    protected $fillable = ['silent'];
+
+    protected function casts(): array
+    {
+        return [
+            'silent' => 'bool',
+        ];
+    }
 }

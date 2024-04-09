@@ -1,45 +1,70 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet"/>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <!-- Styles -->
-        @livewireStyles
-    </head>
-    <body class="font-sans antialiased">
-        <x-banner />
+    <!-- Styles -->
+    @livewireStyles
+    <style>
 
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @livewire('navigation-menu')
+        *::-webkit-scrollbar {
+            width: 4px;
+            height: 8px;
+        }
 
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
+        *::-webkit-scrollbar-thumb {
+            background-color: rgb(156 163 175 / 0.75);
+        }
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
+        *::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px rgb(156 163 175 / 0.75);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased bg-left md:bg-center bg-cover"
+      style="background-image: url('https://reverb.laravel.com/images/hero-background.png')"
+      :class="{ 'overflow-hidden': modalOpen }">
+<div class="flex h-screen">
+    <x-sidebar-menu>
+        @if (isset($titleMenu))
+            <x-slot name="titleMenu">
+                {{ $titleMenu }}
+            </x-slot>
+        @endif
+        @if (isset($menu))
+            <x-slot name="menu">
+                {{ $menu }}
+            </x-slot>
+        @endif
+    </x-sidebar-menu>
+    <!-- /Sidebar -->
 
-        @stack('modals')
+    <div class="flex h-screen overflow-hidden w-full flex-col justify-between">
+        <!-- Navbar -->
+        @livewire('navigation-menu')
+        <!-- /Navbar -->
 
-        @livewireScripts
-    </body>
+        <!-- Main -->
+        <main id="dashboard-main" class="flex-grow overflow-auto md:rounded-tl-xl shadow bg-white/10">
+            <!-- Put your content inside of the <main/> tag -->
+            {{ $slot }}
+        </main>
+    </div>
+</div>
+
+@stack('modals')
+
+@livewireScripts
+</body>
 </html>
