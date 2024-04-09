@@ -2,9 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Message;
+use App\Models\Team;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Faker\Generator;
 use Illuminate\Database\Seeder;
+
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +17,39 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->withPersonalTeam()->create();
+        User::factory(10)->withPersonalTeam()
+            ->create();
 
-        User::factory()->withPersonalTeam()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        User::factory()->withPersonalTeam()
+            ->create([
+                'name' => 'Test User',
+                'email' => 'test@example.com',
+            ]);
+
+        $users = User::all();
+        foreach ($users as $user) {
+            Team::factory(2)->create([
+                'user_id' => $user->id,
+            ]);
+        }
+
+        foreach (Team::all() as $team) {
+            $usersId = [];
+            for ($i = 0; $i < random_int(2, 6); $i++) {
+                $id = $users->random()->id;
+                while (in_array($id, $usersId)) {
+                    $id = $users->random()->id;
+                }
+                $usersId[] = $id;
+            }
+            $team->users()->sync($usersId);
+            for ($i = 0; $i < random_int(5, 12); $i++) {
+                $message = new Message([
+                    'user_id' => $team->users->random()->id,
+                    'content' => app(Generator::class)->paragraph(),
+                ]);
+                $team->messages()->save($message);
+            }
+        }
     }
 }

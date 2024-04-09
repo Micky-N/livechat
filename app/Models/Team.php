@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
@@ -54,6 +55,11 @@ class Team extends JetstreamTeam
     public function owner(): BelongsTo
     {
         return $this->belongsTo(Jetstream::userModel(), 'user_id');
+    }
+
+    public function members(): BelongsToMany
+    {
+        return $this->users()->whereNot('user_id', $this->user_id);
     }
 
     /**

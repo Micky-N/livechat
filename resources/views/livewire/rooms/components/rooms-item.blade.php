@@ -1,10 +1,8 @@
 <?php
 
-use function Livewire\Volt\{state, computed, form};
+use function Livewire\Volt\{state, computed};
 
 state(['room']);
-
-$form = form(\App\Livewire\Forms\RoomForm::class);
 
 $owner = computed(fn() => $this->room->owner);
 
@@ -26,7 +24,7 @@ $owner = computed(fn() => $this->room->owner);
         <li class="flex items-end justify-between py-4 text-white">
             <div class="flex items-center overflow-hidden">
                 <div class="flex-shrink-0">
-                    <img class="w-8 h-8 rounded-full" src="{{ $this->owner->profile_photo_url }}"
+                    <img class="w-10 h-10 rounded-full" src="{{ $this->owner->profile_photo_url }}"
                         alt="{{ $this->owner->login }}">
                 </div>
                 <div class="flex-1 min-w-0 ms-4">
@@ -41,7 +39,7 @@ $owner = computed(fn() => $this->room->owner);
         </li>
         <div class="flex justify-between items-end pb-2 pt-4">
             <div class="flex flex-col justify-between text-sm text-right">
-                <p class="w-max">Members: <span class="text-orange-400 font-bold">{{ $room->users()->count() }}</span>
+                <p class="w-max">Members: <span class="text-orange-400 font-bold">{{ $room->members()->count() }}</span>
                 </p>
                 <p class="w-max">Messages: <span
                         class="text-orange-400 font-bold">{{ $room->unReadMessages()->count() }}</span></p>
