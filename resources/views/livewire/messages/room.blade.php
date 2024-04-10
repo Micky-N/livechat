@@ -87,18 +87,18 @@ $send = function (string $content) {
                                 }, 200)
                             }
                         }" x-cloak x-on:message-created.window="scrollToBottom()"
-                            class="chat-area flex-grow h-full overflow-hidden flex flex-col justify-between pt-6 pb-2 px-4">
+                            class="chat-area flex-grow h-full overflow-hidden flex flex-col justify-between pb-2">
                             <div x-ref="messages" id="messages" class="grow overflow-auto h-72">
-                                <div class="overflow-auto flex-1 space-y-6">
-                                    @foreach($room->messages()->orderBy('created_at', 'asc')->get() as $message)
+                                <div class="overflow-auto flex-1 space-y-6 mt-4">
+                                    @foreach($room->messages()->orderBy('created_at')->get() as $message)
                                         <livewire:components.message :$message :key="$message->id"/>
                                     @endforeach
                                 </div>
                             </div>
 
-                            <form class="pt-4">
+                            <form class="pt-4 px-4">
                                 <label :for="$refs.chat" class="sr-only">Your message</label>
-                                <div class="flex items-center px-3 py-2 rounded-lg bg-black/20">
+                                <div class="flex items-center px-3 py-2 rounded-lg bg-black/40">
                                     <textarea x-ref="chat" rows="1" x-on:input="resize()" x-on:keydown="send($event)" x-model="content"
                                               class="block resize-none mx-4 px-2.5 py-2 w-full text-base text-gray-100 placeholder-gray-400 bg-transparent rounded-lg border-0 focus:ring-0"
                                               placeholder="Your message..."></textarea>
