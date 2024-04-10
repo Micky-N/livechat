@@ -9,7 +9,7 @@ $isMine = computed(fn() => $this->message->user_id == auth()->id());
 ?>
 
 
-<div class="flex items-start space-x-2.5 group relative py-2 px-4 rounded-md mx-4 hover:bg-black/40">
+<div class="flex items-start col-end-1 space-x-2.5 group relative py-2 px-4 rounded-md mx-4 hover:bg-black/40">
     <img class="w-10 h-10 rounded-full" src="{{ $message->sender->profile_photo_url }}"
          alt="{{ $message->sender->login }}">
     <div class="flex flex-col space-y-1 w-full">

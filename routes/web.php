@@ -14,7 +14,7 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
     Volt::route('/rooms', 'rooms.index')->name('rooms.index');
-    Volt::route('/dm', 'dm.index')->name('dm.index');
+    Volt::route('/friends', 'friends.index')->name('friends.index');
     Volt::route('/messages/rooms/{room}', 'messages.room')->name('rooms.messages');
-    Volt::route('/messages/dm/{user}', 'messages.dm')->name('dm.messages');
+    Volt::route('/messages/friends/{friend}', 'messages.friend')->name('friends.messages');
 });

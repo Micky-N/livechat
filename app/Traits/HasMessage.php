@@ -11,7 +11,7 @@ trait HasMessage
 {
     public function unReadMessages(): Collection
     {
-        return $this->messages()->whereDoesntHave('readBy', function (Builder $query) {
+        return $this->messages()->whereNot('user_id', auth()->id())->whereDoesntHave('readBy', function (Builder $query) {
             $query->where('user_id', $this->{$this->user_key});
         })->get();
     }

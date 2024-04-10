@@ -73,11 +73,13 @@
                         }
                     }" x-cloak x-on:message-created.window="scrollToBottom()"
                         class="chat-area relative flex-grow h-full w-full overflow-hidden flex flex-col justify-between pt-10">
-                        <div x-ref="messages" id="messages" class="grow overflow-auto h-72 w-full">
-                            <div class="overflow-auto flex-1 space-y-6 w-full">
-                                @foreach ($messages as $message)
-                                    <livewire:components.message :$message :key="$message->id" />
-                                @endforeach
+                        <div class="h-full overflow-auto relative">
+                            <div x-ref="messages" id="messages" class="grow overflow-auto w-full absolute h-full">
+                                <div class="overflow-auto flex-1 grid grid-rows-1 items-end space-y-6 w-full h-full">
+                                    @foreach ($messages as $message)
+                                        <livewire:components.message :$message :key="$message->id" />
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                         <form class="py-4 px-4">

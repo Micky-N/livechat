@@ -86,7 +86,7 @@ class User extends Authenticatable
     {
         return $this->ownedTeams()
             ->where('personal_team', false)
-            ->get()->merge($this->teams)
+            ->get()->merge($this->teams()->where('personal_team', false)->get())
             ->sortBy('name');
     }
 
