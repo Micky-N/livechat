@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\HasMessage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -17,6 +18,7 @@ class User extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
+    use HasMessage;
     use HasProfilePhoto;
     use HasTeams;
     use Notifiable;
@@ -33,6 +35,8 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+
+    protected string $user_key = 'id';
 
     /**
      * The attributes that should be hidden for serialization.

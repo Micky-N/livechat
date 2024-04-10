@@ -25,5 +25,5 @@ $send = function (string $content) {
 
 <div class="h-full overflow-hidden bg-black/40">
     <livewire:rooms.layout :rooms="$this->rooms" />
-    @include('livewire.messages.container')
+    @include('livewire.messages.container', ['messages' => $room->messages()->orderBy('created_at')->get()])
 </div>
