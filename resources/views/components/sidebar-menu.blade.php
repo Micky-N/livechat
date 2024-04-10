@@ -5,7 +5,7 @@
         :class="sidebarOpen ? 'translate-x-0 z-50' : '-translate-x-full md:translate-x-0'">
         <!-- Sidebar -->
         <button type="button" x-on:click="sidebarOpen = !sidebarOpen"
-            class="flex items-center justify-center w-10 h-10 hover:bg-white/40 hover:text-gray-100 items-center text-neutral-400 bg-white/20 top-0 md:hidden absolute -right-10 top-0 rounded-br-md overflow-hidden">
+            class="flex justify-center w-10 h-10 hover:bg-white/40 hover:text-gray-100 items-center text-neutral-400 bg-white/20 md:hidden absolute -right-10 top-0 rounded-br-md overflow-hidden">
             <template x-if="!sidebarOpen">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-6 h-6">
@@ -31,7 +31,7 @@
                         <p class="text-xs text-gray-400 mt-1">{{ auth()->user()->login }}</p>
                     </div>
 
-                    <span class="ml-3 mt-10 mb-2 block text-xs font-semibold text-gray-400">Menu</span>
+                    <span class="ml-3 mt-8 mb-2 block text-xs font-semibold text-gray-400">Menu</span>
 
                     <a href="{{ route('rooms.index') }}"
                         class="flex cursor-pointer items-center {{ request()->routeIs('rooms.*') ? 'border-l-4 text-orange-400' : 'text-white' }} border-l-orange-400 py-3 px-4 text-sm font-medium outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-orange-400 hover:text-orange-400 focus:border-l-4">
@@ -55,7 +55,7 @@
                     </a>
 
                     @if (isset($titleMenu))
-                        <div class="mx-3 mt-8 block text-xs font-semibold text-gray-400">{{ $titleMenu }}</div>
+                        <div class="mx-3 mt-6 block text-xs font-semibold text-gray-400">{{ $titleMenu }}</div>
                     @endif
 
                     @if (isset($menu))

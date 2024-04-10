@@ -12,7 +12,6 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
     Volt::route('/rooms', 'rooms.index')->name('rooms.index');
     Volt::route('/friends', 'friends.index')->name('friends.index');
     Volt::route('/messages/rooms/{room}', 'messages.room')->name('rooms.messages');

@@ -16,7 +16,7 @@ $send = function (string $content) {
         'content' => $content,
     ]);
 
-    $this->room->messages->push($newMessage);
+    $this->room->messages = $this->room->messages()->orderBy('created_at')->get();
 
     $this->dispatch('message-created');
 };

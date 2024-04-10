@@ -41,12 +41,12 @@ $selectMember = function (User $member) {
             placeholder="Type user login" />
         @if ($active && $members->count())
             <div class="relative">
-                <div class="top-100 absolute mt-1 w-full rounded-lg border bg-white shadow-xl">
+                <div class="top-100 absolute mt-1 w-full rounded-lg overflow-hidden border bg-white shadow-xl">
                     <div class="text-sm">
-                        <ul class="divide-y max-h-48 overflow-x-hidden rounded-lg">
+                        <ul class="divide-y max-h-72 overflow-x-hidden rounded-lg">
                             @foreach ($members as $member)
                                 <li wire:click="selectMember({{ $member->id }})"
-                                    class="block flex w-full cursor-pointer px-3 py-2 hover:bg-gray-100">
+                                    class="flex w-full cursor-pointer px-3 py-2 hover:bg-gray-100">
                                     {{ $member->login }}
                                 </li>
                             @endforeach

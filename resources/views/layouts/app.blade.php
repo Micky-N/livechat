@@ -50,13 +50,13 @@
     </x-sidebar-menu>
     <!-- /Sidebar -->
 
-    <div class="flex h-screen w-full flex-col justify-between">
+    <div class="flex h-screen w-full flex-col justify-between overflow-hidden">
         <!-- Navbar -->
         @livewire('navigation-menu')
         <!-- /Navbar -->
 
         <!-- Main -->
-        <main id="dashboard-main" class="flex-1 overflow-hidden md:rounded-tl-xl shadow bg-white/10">
+        <main class="flex-1 overflow-auto md:rounded-tl-xl shadow bg-white/10">
             <!-- Put your content inside of the <main/> tag -->
             {{ $slot }}
         </main>

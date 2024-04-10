@@ -19,8 +19,7 @@ $removeRoom = function () {
         $this->room->delete();
         $message = 'Room successfully deleted.';
     } else {
-        // TODO: Implement leave method
-        \App\Models\Team::delete($this->room->id);
+        $this->room->users()->detach(auth()->id());
         $message = 'Room successfully left.';
     }
     session()->flash('success', $message);

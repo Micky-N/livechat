@@ -5,11 +5,11 @@
         }" x-cloak class="main-body h-full w-full flex flex-col">
             <div class="main flex-1 flex flex-col">
                 <div class="flex-1 flex relative">
-                    @if (request()->routeIs('rooms.messages'))
+                    @if (isset($room))
                         <div :class="openGroup ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'" x-on:click.outside="openGroup = false"
-                            class="sidebar transition absolute top-0 bottom-0 z-[1] lg:z-0 lg:static lg:block lg:flex w-2/4 lg:w-1/4 flex-2 flex-col py-6 pl-4 pr-10 bg-black/90 lg:bg-black/40">
+                            class="sidebar transition absolute top-0 bottom-0 z-[1] lg:z-0 lg:static lg:flex w-2/4 lg:w-1/4 flex-2 flex-col py-6 pl-4 pr-10 bg-black/90 lg:bg-black/40">
                             <button type="button" x-on:click="openGroup = !openGroup"
-                                class="flex items-center justify-center w-10 h-10 hover:bg-slate-100/20 hover:text-gray-100 items-center text-neutral-400 bg-slate-100/5 top-0 lg:hidden absolute -right-10 top-0 rounded-br-md overflow-hidden">
+                                class="flex justify-center w-10 h-10 hover:bg-slate-100/20 hover:text-gray-100 items-center text-neutral-400 bg-slate-100/5 top-0 lg:hidden absolute -right-10 top-0 rounded-br-md overflow-hidden">
                                 <template x-if="!openGroup">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -72,10 +72,11 @@
                             }, 200)
                         }
                     }" x-cloak x-on:message-created.window="scrollToBottom()"
-                        class="chat-area relative flex-grow h-full w-full overflow-hidden flex flex-col justify-between pt-10">
+                        class="chat-area relative flex-grow h-full w-full overflow-hidden flex flex-col justify-between">
+                        <h3 class="pt-3 text-center px-4 text-lg underline underline-offset-4 decoration-orange-500 text-white">{{ isset($room) ? $room->name : $friend->login }}</h3>
                         <div class="h-full overflow-auto relative">
                             <div x-ref="messages" id="messages" class="grow overflow-auto w-full absolute h-full">
-                                <div class="overflow-auto flex-1 grid grid-rows-1 items-end space-y-6 w-full h-full">
+                                <div class="overflow-auto flex-1 grid grid-rows-1 items-end gap-y-4 w-full h-full">
                                     @foreach ($messages as $message)
                                         <livewire:components.message :$message :key="$message->id" />
                                     @endforeach

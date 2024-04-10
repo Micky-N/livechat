@@ -16,7 +16,7 @@ $send = function (string $content) {
         'content' => $content,
     ]);
 
-    $this->friend->messages->push($newMessage);
+    $this->friend->messages = $this->friend->messages()->orderBy('created_at')->get();
 
     $this->dispatch('message-created');
 };
@@ -25,5 +25,5 @@ $send = function (string $content) {
 
 <div class="h-full overflow-hidden bg-black/40">
     <livewire:friends.layout :friends="$this->friends" />
-    @include('livewire.messages.container', ['messages' => $friend->messages()->orderBy('created_at', 'desc')->get()])
+    @include('livewire.messages.container', ['messages' => $friend->messages()->orderBy('created_at')->get()])
 </div>

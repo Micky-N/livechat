@@ -3,13 +3,15 @@
 use function Livewire\Volt\{state, form, on};
 
 state(['isOpen' => false]);
-$form = form(\App\Livewire\Forms\RoomForm::class);
+form(\App\Livewire\Forms\RoomForm::class);
 
 on([
     'add-room' => function () {
+        $this->form->reset();
         $this->isOpen = true;
     },
     'edit-room' => function (\App\Models\Team $room) {
+        $this->form->reset();
         $this->form->setRoom($room);
         $this->isOpen = true;
     },
@@ -20,10 +22,10 @@ on([
 
 $save = function () {
     if ($this->form->room) {
-        $room = $this->form->update();
+        $this->form->update();
         $message = 'Room successfully updated.';
     } else {
-        $room = $this->form->store();
+        $this->form->store();
         $message = 'Room successfully store.';
     }
     session()->flash('success', $message);
