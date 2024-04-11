@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Traits\HasMessage;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -97,5 +98,15 @@ class User extends Authenticatable
         })->join(' '));
 
         return 'https://ui-avatars.com/api/?name='.urlencode($name).'&color=7F9CF5&background=EBF4FF';
+    }
+
+    /**
+     * Get the user's "personal" team users.
+     *
+     * @return Collection<int, \App\Models\User>
+     */
+    public function personalTeamUsers(): Collection
+    {
+        return $this->personalTeam()->users()->whereNot('user_id', $this->id)->get();
     }
 }

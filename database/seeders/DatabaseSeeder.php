@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
 
         for ($i = 0; $i < 20; $i++) {
             $message = new Message([
-                'user_id' => $me->personalTeam()->users->random()->id,
+                'user_id' => $me->personalTeamUsers()->random()->id,
                 'content' => app(Generator::class)->paragraph(),
             ]);
             $me->messages()->save($message);
