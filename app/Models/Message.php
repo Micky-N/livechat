@@ -35,4 +35,13 @@ class Message extends Model
     {
         return $this->belongsToMany(User::class, 'message_read');
     }
+
+    public function isMessageReadBy(User $user): bool
+    {
+        if ($user->id == $this->user_id) {
+            return true;
+        }
+
+        return $this->readBy()->exists();
+    }
 }

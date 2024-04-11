@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->withPersonalTeam()
             ->create();
 
-        User::factory()->withPersonalTeam()
+        $me = User::factory()->withPersonalTeam()
             ->create([
                 'name' => 'Test User',
                 'email' => 'test@example.com',
@@ -50,6 +50,14 @@ class DatabaseSeeder extends Seeder
                 ]);
                 $team->messages()->save($message);
             }
+        }
+
+        for ($i = 0; $i < 20; $i++) {
+            $message = new Message([
+                'user_id' => $me->personalTeam()->users->random()->id,
+                'content' => app(Generator::class)->paragraph(),
+            ]);
+            $me->messages()->save($message);
         }
     }
 }

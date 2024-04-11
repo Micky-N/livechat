@@ -3,10 +3,7 @@
 use function Livewire\Volt\{state, mount, computed, layout};
 
 layout('layouts.app');
-state(['friend' => fn(\App\Models\User $friend) => $friend]);
-
-/** @var \App\Models\User $user */
-$user = \Illuminate\Support\Facades\Auth::user();
+state(['friend' => fn(\App\Models\User $friend) => $friend, 'messages']);
 
 $friends = computed(fn() => $user->personalTeam()->users);
 
@@ -16,14 +13,23 @@ $send = function (string $content) {
         'content' => $content,
     ]);
 
-    $this->friend->messages = $this->friend->messages()->orderBy('created_at')->get();
+    $this->messages = auth()->user()->messages()
+        ->where('user_id', $this->friend->id)
+        ->get()->merge($this->friend->messages()->where('user_id', auth()->id())->get());
 
     $this->dispatch('message-created');
 };
+
+mount(function () {
+    $this->messages = auth()->user()->messages()
+        ->where('user_id', $this->friend->id)
+        ->get()->merge($this->friend->messages()->where('user_id', auth()->id())->get());
+    $this->dispatch('user-with.' . $this->friend->id);
+});
 
 ?>
 
 <div class="h-full overflow-hidden bg-black/40">
     <livewire:friends.layout :friends="$this->friends" />
-    @include('livewire.messages.container', ['messages' => $friend->messages()->orderBy('created_at')->get()])
+    @include('livewire.messages.container', ['messages' => $messages])
 </div>

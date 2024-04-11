@@ -5,10 +5,7 @@ use function Livewire\Volt\{computed, layout, mount, state};
 layout('layouts.app');
 state(['room' => fn(\App\Models\Team $room) => $room]);
 
-/** @var \App\Models\User $user */
-$user = \Illuminate\Support\Facades\Auth::user();
-
-$rooms = computed(fn() => $user->allTeams());
+$rooms = computed(fn() => auth()->user()->allTeams());
 
 $send = function (string $content) {
     $newMessage = $this->room->messages()->create([
@@ -20,6 +17,10 @@ $send = function (string $content) {
 
     $this->dispatch('message-created');
 };
+
+mount(function () {
+    $this->dispatch('user-in-room.' . $this->room->id);
+});
 
 ?>
 
