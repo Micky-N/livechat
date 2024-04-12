@@ -87,7 +87,8 @@
                             this.deleteId = null;
                         },
                         reply(id, login) {
-                            this.replyTo = { id, login }
+                            this.$refs.chat.focus();
+                            this.replyTo = { id, login };
                         },
                         cancelReply() {
                             this.replyTo = {
@@ -99,13 +100,13 @@
                             const message = document.getElementById(messageId);
                             message.scrollIntoView({ behavior: 'smooth', block: 'center' });
                             message.classList.add('transition-all', 'duration-250');
-                            message.classList.add('bg-orange-800/20', 'border-l-[6px]', 'border-orange-500/20');
+                            message.classList.add('bg-orange-800/20', 'border-l-4', 'border-orange-500/20');
                             setTimeout(() => {
-                                message.classList.remove('bg-orange-800/20', 'border-l-[6px]', 'border-orange-500/20');
+                                message.classList.remove('bg-orange-800/20', 'border-l-4');
                             }, 2000)
 
                             setTimeout(() => {
-                                message.classList.remove('transition-all', 'duration-250');
+                                message.classList.remove('transition-all', 'duration-250', 'border-orange-500/20');
                             }, 4000)
                         }
                     }" x-cloak x-on:message-created.window="scrollToBottom()"
