@@ -20,7 +20,7 @@ class DeleteUser implements DeletesUsers
     /**
      * Delete the given user.
      */
-    public function delete(User $user): void
+    public function delete(\Illuminate\Foundation\Auth\User|User $user): void
     {
         DB::transaction(function () use ($user) {
             $this->deleteTeams($user);

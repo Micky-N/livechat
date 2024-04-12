@@ -4,6 +4,7 @@ namespace App\Livewire\Forms;
 
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
@@ -48,7 +49,15 @@ class RoomForm extends Form
         );
 
         $this->members[] = Auth::user();
-        $this->room->users()->sync($this->membersId());
+        $membersIds = $this->membersId();
+        /** @var Collection<int, User> $oldUsers */
+        $oldUsers = $this->room->users;
+        foreach ($oldUsers as $oldUser) {
+            if (! in_array($oldUser->id, $membersIds)) {
+                $oldUser->sendedMessages()->where('recipent_id', $this->room->id)->where('recipent_type', Team::class)->delete();
+            }
+        }
+        $this->room->users()->sync($membersIds);
     }
 
     private function membersId(): array

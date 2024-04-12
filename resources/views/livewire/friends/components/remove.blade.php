@@ -15,6 +15,8 @@ $removeFriend = function () {
     $id = $this->friend->id;
     /** @var \App\Models\User $user */
     $user = auth()->user();
+    $this->friend->sendedMessages()->where('recipent_id', $user->id)->where('recipent_type', \App\Models\User::class)->delete();
+    $user->sendedMessages()->where('recipent_id', $this->friend->id)->where('recipent_type', \App\Models\User::class)->delete();
     $user->personalTeam()->users()->detach($id);
     $message = 'Friend successfully removed.';
     session()->flash('success', $message);

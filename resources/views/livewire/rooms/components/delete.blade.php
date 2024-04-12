@@ -14,11 +14,11 @@ on([
 $isMine = computed(fn () => $this->room?->user_id === auth()->id());
 
 $removeRoom = function () {
-    $id = $this->room->id;
     if ($this->isMine) {
         $this->room->delete();
         $message = 'Room successfully deleted.';
     } else {
+        auth()->user()->sendedMessages()->where('recipent_id', $this->room->id)->where('recipent_type', Team::class)->delete();
         $this->room->users()->detach(auth()->id());
         $message = 'Room successfully left.';
     }

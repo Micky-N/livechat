@@ -62,4 +62,11 @@ class Team extends JetstreamTeam
             'personal_team' => 'boolean',
         ];
     }
+
+    protected static function booted(): void
+    {
+        static::deleting(function (Team $team) {
+            $team->messages()->delete();
+        });
+    }
 }

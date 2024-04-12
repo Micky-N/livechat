@@ -7,6 +7,7 @@ use App\Traits\HasMessage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -76,6 +77,11 @@ class User extends Authenticatable
     public function messages(): MorphMany
     {
         return $this->morphMany(Message::class, 'recipent');
+    }
+
+    public function sendedMessages(): HasMany
+    {
+        return $this->hasMany(Message::class);
     }
 
     public function messagesRead(): BelongsToMany
