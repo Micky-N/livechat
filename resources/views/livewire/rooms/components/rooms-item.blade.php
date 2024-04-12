@@ -43,8 +43,12 @@ $isMine = computed(fn() => $this->room->user_id == auth()->id());
                 <p class="w-max">Members: <span
                         class="text-orange-400 font-bold">{{ $room->members()->count() }}</span>
                 </p>
-                <p class="w-max">Messages: <span
-                        class="text-orange-400 font-bold">{{ $room->unReadMessages()->count() }}</span></p>
+                @if ($room->messages()->count())
+                    <p class="w-max">Unread messages: <span class="text-orange-400 font-bold">
+                            {{ $room->unReadMessages()->count() }} /
+                            {{ $room->messages()->count() }} messages</span>
+                    </p>
+                @endif
             </div>
         </div>
         <button wire:click.prevent="$dispatch('edit-room', {room: {{ $room->id }}})"
