@@ -41,7 +41,7 @@ mount(fn() => ($this->content = $this->message->content));
                     alt="{{ $this->replyTo->sender->login }}">
                 <div class="flex space-x-2 items-center w-full">
                     <p class="text-orange-500 font-bold hover:underline opacity-70 hover:opacity-100 cursor-pointer">{{ $this->replyTo->sender->login }}</p>
-                    <p x-on:click="scrollTo('message-{{ $message->id }}')" class="flex-grow overflow-hidden w-2 text-nowrap text-ellipsis">
+                    <p x-on:click="scrollTo('message-{{ $this->replyTo->id }}')" class="flex-grow overflow-hidden w-2 text-nowrap text-ellipsis">
                         <span class="opacity-70 hover:opacity-100 hover:text-white cursor-pointer">{{ $this->replyTo->content }}</span>
                     </p>
                 </div>

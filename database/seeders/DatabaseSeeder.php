@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
                 $usersId[] = $id;
             }
             $team->users()->sync($usersId);
-            for ($i = 0; $i < random_int(5, 12); $i++) {
+            for ($i = 0; $i < random_int(5, 25); $i++) {
                 $message = new Message([
                     'user_id' => $team->users->random()->id,
                     'content' => app(Generator::class)->paragraph(),
