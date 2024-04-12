@@ -23,7 +23,7 @@ mount(fn() => ($this->content = $this->message->content));
 ?>
 
 
-<div id="message-{{ $message->id }}" class="relative group hover:bg-black/40 py-0.5 px-4 rounded-md mx-4">
+<div id="message-{{ $message->id }}" class="relative group hover:bg-black/40 py-0.5 px-8">
     @if ($this->replyTo)
         <div class="relative flex space-x-2.5 h-7 justify-between">
             <span class="absolute left-3 w-10 -top-1 text-neutral-600 flex justify-center">
@@ -58,7 +58,7 @@ mount(fn() => ($this->content = $this->message->content));
                     <span class="text-xs font-extralight text-gray-300">{{ $message->created_at }}</span>
                 </div>
                 <div x-show="messageToEdit != {{ $message->id }}"
-                    class="items-center text-neutral-400 bg-slate-100/5 top-0 hidden group-hover:flex absolute right-0 rounded-bl-md rounded-tr-md overflow-hidden">
+                    class="items-center text-neutral-400 bg-neutral-800 top-0 hidden group-hover:flex absolute right-0 rounded-bl-md overflow-hidden">
                     <button type="button" x-on:click="reply({{ $message->id }}, '{{ $message->sender->login }}')"
                         class="flex items-center justify-center w-10 h-7 hover:bg-slate-100/20 hover:text-gray-100">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"

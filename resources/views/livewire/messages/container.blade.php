@@ -95,11 +95,18 @@
                                 login: ''
                             };
                         },
-                        scrollTo(id) {
-                            const message = document.getElementById(id);
-                            const innerDivPos = message.offsetTop
-                            const messages = document.getElementById('messages')
-                            message.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                        scrollTo(messageId) {
+                            const message = document.getElementById(messageId);
+                            message.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            message.classList.add('transition-all', 'duration-250');
+                            message.classList.add('bg-orange-800/20', 'border-l-[6px]', 'border-orange-500/20');
+                            setTimeout(() => {
+                                message.classList.remove('bg-orange-800/20', 'border-l-[6px]', 'border-orange-500/20');
+                            }, 2000)
+
+                            setTimeout(() => {
+                                message.classList.remove('transition-all', 'duration-250');
+                            }, 4000)
                         }
                     }" x-cloak x-on:message-created.window="scrollToBottom()"
                         x-on:keydown.escape.window="messageToEdit = null"
