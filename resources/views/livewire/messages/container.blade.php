@@ -94,6 +94,17 @@
                                 id: null,
                                 login: ''
                             };
+                        },
+                        scrollTo(id) {
+                            const message = document.getElementById(id);
+                            const innerDivPos = message.offsetTop
+                            const messages = document.getElementById('messages')
+                            console.log(message.offsetParent, innerDivPos);
+                            var limit = Math.max( messages.scrollHeight, messages.offsetHeight,
+                   document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight );
+                            console.log(limit)
+                            messages.scrollTop = - limit
+                            messages.scrollTop = - (limit - innerDivPos)
                         }
                     }" x-cloak x-on:message-created.window="scrollToBottom()"
                         x-on:keydown.escape.window="messageToEdit = null"
