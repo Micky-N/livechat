@@ -14,6 +14,8 @@ $send = function (string $content, int $replyTo = null) {
         'reply_to' => $replyTo
     ]);
 
+    \App\Events\Friend\GotMessage::dispatch($newMessage);
+
     $this->messages = auth()->user()->messages()
         ->where('user_id', $this->friend->id)
         ->get()->merge($this->friend->messages()->where('user_id', auth()->id())->get())->sortByDesc('created_at');
@@ -31,7 +33,12 @@ mount(function () {
 
 ?>
 
-<div class="h-full overflow-hidden bg-black/40">
+<div class="h-full overflow-hidden bg-black/40" x-init="
+    Echo.channel('channel-name')
+        .listen('.friend-got-message', (e) => {
+            console.log(e);
+        })
+">
     <livewire:friends.layout :friends="$this->friends" />
     @include('livewire.messages.container', ['messages' => $messages])
 </div>

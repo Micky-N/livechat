@@ -116,18 +116,19 @@ mount(fn() => ($this->content = $this->message->content));
             </div>
             <div class="text-base font-extralight text-gray-200 pr-4" x-data="{
                 content: @entangle('content'),
+                messageId: {{ $message->id }},
                 updateMessage(event) {
                     if (event.keyCode === 13 && !event.shiftKey) {
                         event.preventDefault();
                         if (this.content.trim()) {
-                            $wire.$dispatch('update-message.{{ $message->id }}');
+                            $wire.$dispatch('update-message.' + this.messageId);
                             this.messageToEdit = null;
                         }
                     }
                 },
             }">
-                <span x-show="messageToEdit != {{ $message->id }}" x-text="content"></span>
-                <form x-show="messageToEdit == {{ $message->id }}" class="py-2">
+                <span x-show="messageToEdit != messageId" x-text="content"></span>
+                <form x-show="messageToEdit == messageId" class="py-2">
                     <label :for="$refs.chat" class="sr-only">Your message</label>
                     <div class="flex items-center px-3 rounded-lg bg-neutral-800/40">
                         <textarea x-ref="chat" rows="1" x-on:input="resize()" x-on:keydown="updateMessage($event)" x-model="content"
