@@ -3,7 +3,8 @@ import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
 
-// window.Echo = new Echo({
+window.Echo = new Echo({
+// REVERB
 //     broadcaster: 'reverb',
 //     key: import.meta.env.VITE_REVERB_APP_KEY,
 //     wsHost: import.meta.env.VITE_REVERB_HOST,
@@ -11,9 +12,8 @@ window.Pusher = Pusher;
 //     wssPort: import.meta.env.VITE_REVERB_PORT ?? 443,
 //     forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
 //     enabledTransports: ['ws', 'wss'],
-// });
-
-window.Echo = new Echo({
+//
+// PUSHER
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: 'eu',
