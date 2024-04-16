@@ -57,6 +57,8 @@
                             id: null,
                             login: ''
                         },
+                        messages: @entangle('messages'),
+                        users: @entangle('users'),
                         get canSend() {
                             return this.content.trim() !== '';
                         },
