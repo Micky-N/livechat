@@ -69,7 +69,7 @@ mount(function () {
 ?>
 
 <div class="h-full overflow-hidden bg-black/40" x-init="
-    Echo.channel('channel-name')
+    Echo.private('friend-message.{{ $friend->id }}')
         .listen('.friend-got-message', (e) => {
             $wire.addMessage(e.id);
         })
