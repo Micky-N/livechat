@@ -5,20 +5,20 @@ use function Livewire\Volt\{state, on, computed};
 state(['isOpen' => false, 'friend' => null]);
 
 on([
-    'remove-friend' => function (\App\Models\User $friend) {
+    'remove-friend' => function (\App\Models\Friend $friend) {
         $this->friend = $friend;
         $this->isOpen = true;
     },
 ]);
 
+$user = computed(fn () => optional($this->friend)->getOtherUser(auth()->user()));
+
 $removeFriend = function () {
     $id = $this->friend->id;
     /** @var \App\Models\User $user */
     $user = auth()->user();
-    $this->friend->sendedMessages()->where('recipent_id', $user->id)->where('recipent_type', \App\Models\User::class)->delete();
-    $user->sendedMessages()->where('recipent_id', $this->friend->id)->where('recipent_type', \App\Models\User::class)->delete();
-    $user->acceptedFriendsTo()->detach($id);
-    $user->acceptedFriendsFrom()->detach($id);
+    $this->friend->messages()->delete();
+    $this->friend->delete();
     $message = 'Friend successfully removed.';
     session()->flash('success', $message);
 
@@ -30,7 +30,7 @@ $removeFriend = function () {
 <div >
     <x-confirmation-modal wire:model="isOpen">
         <x-slot name="title">
-            Remove {{ $friend?->login }}
+            Remove {{ $this->user?->login }}
         </x-slot>
 
         <x-slot name="content">

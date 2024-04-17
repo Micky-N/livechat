@@ -2,31 +2,31 @@
 
 use function Livewire\Volt\{state, form, on};
 
-state(['isOpen' => false, 'friends' => []]);
+state(['isOpen' => false, 'users' => []]);
 form(\App\Livewire\Forms\RoomForm::class);
 
 on([
     'add-friends' => function () {
         $this->isOpen = true;
     },
-    'add-friend' => function (\App\Models\User $friend) {
-        $this->friends[] = $friend;
+    'add-user' => function (\App\Models\User $user) {
+        $this->users[] = $user;
     },
 ]);
 
 $save = function () {
     /** @var \App\Models\User $user */
     $user = auth()->user();
-    $user->pendingFriendsTo()->syncWithoutDetaching(array_map(fn (\App\Models\User $friend) => $friend->id, $this->friends));
+    $user->pendingFriendsTo()->syncWithoutDetaching(array_map(fn (\App\Models\User $u) => $u->id, $this->users));
     $message = 'Friends successfully added.';
     session()->flash('success', $message);
 
     $this->redirect(url()->previous());
 };
 
-$removeFriend = function (int $friendId) {
-    $this->friends = array_filter($this->friends, function (\App\Models\User $friend) use ($friendId) {
-        return $friend->id !== $friendId;
+$removeUser = function (int $userId) {
+    $this->users = array_filter($this->users, function (\App\Models\User $user) use ($userId) {
+        return $user->id !== $userId;
     });
 };
 
@@ -51,11 +51,11 @@ $removeFriend = function (int $friendId) {
                             class="text-gray-600">Friends</label>
                         <div
                             class="border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700 min-h-16 mb-3 flex flex-wrap items-start gap-2 rounded-lg text-xs border px-2 py-2">
-                            @forelse ($friends as $friend)
+                            @forelse ($users as $user)
                                 <span
                                     class="border-orange-400 bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300 inline-flex items-center rounded-md border px-2 py-1 font-medium">
-                                    {{ $friend->login }}
-                                    <button type="button" wire:click='removeFriend({{ $friend->id }})'
+                                    {{ $user->login }}
+                                    <button type="button" wire:click='removeUser({{ $user->id }})'
                                         class="text-orange-400 hover:bg-orange-300 hover:text-orange-900 dark:hover:bg-orange-800 dark:hover:text-orange-300 ms-2 inline-flex items-center rounded-sm bg-transparent p-1 text-sm">
                                         <svg class="h-2 w-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                             fill="none" viewBox="0 0 14 14">
@@ -63,7 +63,7 @@ $removeFriend = function (int $friendId) {
                                                 stroke-linejoin="round" stroke-width="2"
                                                 d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                         </svg>
-                                        <span class="sr-only">Remove friend</span>
+                                        <span class="sr-only">Remove user</span>
                                     </button>
                                 </span>
                             @empty

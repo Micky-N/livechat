@@ -63,11 +63,12 @@ class DatabaseSeeder extends Seeder
         }
 
         for ($i = 0; $i < 20; $i++) {
+            $other = $me->friends()->random();
             $message = new Message([
-                'user_id' => $me->friends()->random()->id,
+                'user_id' => $other->id,
                 'content' => app(Generator::class)->paragraph(),
             ]);
-            $me->messages()->save($message);
+            $other->pivot->messages()->save($message);
         }
     }
 }

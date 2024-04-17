@@ -2,7 +2,12 @@
 
 namespace App\Models;
 
+use App\Contracts\Broadcastable;
+use App\Events\GotMessage;
+use App\Events\RemoveMessage;
+use App\Events\UpdateMessage;
 use App\Traits\HasMessage;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -12,10 +17,12 @@ use Laravel\Jetstream\Events\TeamUpdated;
 use Laravel\Jetstream\Jetstream;
 use Laravel\Jetstream\Team as JetstreamTeam;
 
-class Team extends JetstreamTeam
+class Team extends JetstreamTeam implements Broadcastable
 {
     use HasFactory;
     use HasMessage;
+
+    protected string $broadcastPrefix = 'room.';
 
     /**
      * The attributes that are mass assignable.
@@ -51,22 +58,35 @@ class Team extends JetstreamTeam
         return $this->users()->whereNot('user_id', $this->user_id);
     }
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'personal_team' => 'boolean',
-        ];
-    }
-
     protected static function booted(): void
     {
         static::deleting(function (Team $team) {
             $team->messages()->delete();
         });
+    }
+
+    /**
+     * @return PrivateChannel[]
+     */
+    public function channels(Message $message): array
+    {
+        $channels = [new PrivateChannel('room.'.$this->id)];
+        foreach ($this->users()->withPivot('silent')->get() as $user) {
+            if ($user->pivot->silent) {
+                continue;
+            }
+            $channels[] = new PrivateChannel('App.Models.User.'.$user->id);
+        }
+
+        return $channels;
+    }
+
+    public function broadcastAs(string $event): string
+    {
+        return match ($event) {
+            GotMessage::class => 'got-message',
+            UpdateMessage::class => 'update-message',
+            RemoveMessage::class => 'remove-message'
+        };
     }
 }

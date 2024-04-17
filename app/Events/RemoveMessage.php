@@ -2,13 +2,12 @@
 
 namespace App\Events;
 
-class UpdateMessage extends AbstractMessageEvent
+class RemoveMessage extends AbstractMessageEvent
 {
     public function broadcastWith(): array
     {
         return [
             'id' => $this->message->id,
-            'content' => $this->message->content,
         ];
     }
 }

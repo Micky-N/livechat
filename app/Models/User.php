@@ -3,7 +3,6 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Traits\HasMessage;
 use App\Traits\HasNoPersonalTeam;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,7 +20,6 @@ class User extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
-    use HasMessage;
     use HasNoPersonalTeam, HasTeams {
         HasNoPersonalTeam::ownsTeam insteadof HasTeams;
         HasNoPersonalTeam::isCurrentTeam insteadof HasTeams;
@@ -96,7 +94,8 @@ class User extends Authenticatable
     public function friendsTo(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id')
-            ->withPivot('accepted')
+            ->using(Friend::class)
+            ->withPivot('id')
             ->withTimestamps();
     }
 
@@ -108,7 +107,8 @@ class User extends Authenticatable
     public function friendsFrom(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'friends', 'friend_id', 'user_id')
-            ->withPivot('accepted')
+            ->using(Friend::class)
+            ->withPivot('id')
             ->withTimestamps();
     }
 

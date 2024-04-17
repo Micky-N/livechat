@@ -20,7 +20,7 @@ on([
 $updateMessage = function () {
     $this->message->content = trim($this->content);
     $this->message->save();
-    \App\Events\UpdateMessage::dispatch($this->message);
+    broadcast(new \App\Events\UpdateMessage($this->message))->toOthers();
 };
 
 mount(fn() => ($this->content = $this->message->content));

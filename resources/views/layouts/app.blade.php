@@ -34,7 +34,12 @@
 </head>
 <body class="font-sans antialiased bg-left md:bg-center bg-cover"
       style="background-image: url('https://reverb.laravel.com/images/hero-background.png')"
-      :class="{ 'overflow-hidden': modalOpen }">
+      :class="{ 'overflow-hidden': modalOpen }" x-data="{modalOpen: false}" x-init="
+        Echo.private('App.Models.User.{{ auth()->id() }}')
+        .listenToAll((event, data) => {
+            console.log(event, data)
+        });
+  ">
 <div class="flex h-screen">
     <x-sidebar-menu>
         @if (isset($titleMenu))

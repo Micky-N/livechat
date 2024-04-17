@@ -9,7 +9,7 @@ state(['friends' => collect()]);
 mount(function () {
     /** @var \App\Models\User $user */
     $user = \Illuminate\Support\Facades\Auth::user();
-    $this->friends = $user->friends();
+    $this->friends = $user->friends()->map(fn (\App\Models\User $friend) => $friend->pivot);
 });
 
 ?>
@@ -19,7 +19,7 @@ mount(function () {
     <div class="p-6 lg:p-8">
         <ul class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             @foreach ($this->friends as $friend)
-                @include('livewire.friends.components.friends-item')
+                @include('livewire.friends.components.friends-item', ['user' => $friend->getOtherUser(auth()->user())])
             @endforeach
         </ul>
     </div>
