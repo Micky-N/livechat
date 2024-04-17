@@ -1,15 +1,15 @@
 <?php
 
-use function Livewire\Volt\{state, layout, mount};
+use function Livewire\Volt\{state, layout, mount, computed};
 
 layout('layouts.app');
 
 state(['friends' => collect()]);
 
+$friendsIds = computed(fn () => auth()->user()->friends()->map(fn (\App\Models\User $friend) => $friend->id)->merge([auth()->id()]));
+
 mount(function () {
-    /** @var \App\Models\User $user */
-    $user = \Illuminate\Support\Facades\Auth::user();
-    $this->friends = $user->friends()->map(fn (\App\Models\User $friend) => $friend->pivot);
+    $this->friends = auth()->user()->friends()->map(fn (\App\Models\User $friend) => $friend->pivot);
 });
 
 ?>
@@ -24,7 +24,7 @@ mount(function () {
         </ul>
     </div>
 
-    <livewire:friends.components.add />
+    <livewire:friends.components.add :friends-ids="$this->friendsIds" />
 
     <livewire:friends.components.remove />
 </div>

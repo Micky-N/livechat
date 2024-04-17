@@ -2,7 +2,7 @@
 
 use function Livewire\Volt\{state, form, on};
 
-state(['isOpen' => false, 'users' => []]);
+state(['isOpen' => false, 'users' => [], 'friendsIds']);
 form(\App\Livewire\Forms\RoomForm::class);
 
 on([
@@ -44,7 +44,7 @@ $removeUser = function (int $userId) {
                     <div>
                         <label class="text-gray-600">Autocomplete
                             Friend</label>
-                        <livewire:friends.components.friends-autocomplete />
+                        <livewire:friends.components.friends-autocomplete :friends-ids="$this->friendsIds" />
                     </div>
                     <div>
                         <label for="friends"

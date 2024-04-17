@@ -26,6 +26,8 @@ on([
 
 $friends = computed(fn() => auth()->user()->friends()->map(fn (\App\Models\User $user) => $user->pivot));
 
+$friendsIds = computed(fn () => auth()->user()->friends()->map(fn (\App\Models\User $friend) => $friend->id)->merge([auth()->id()]));
+
 $otherUser = computed(fn () => $this->friend->getOtherUser(auth()->user()));
 
 $send = function (string $content, int $replyTo = null) {
@@ -48,12 +50,6 @@ $resetMessages = function () {
     $this->messages = $this->friend->messages()
         ->where('user_id', $this->friend->getOtherUser(auth()->user())->id)
         ->get()->merge($this->friend->messages()->where('user_id', auth()->id())->get())->sortByDesc('created_at');
-};
-
-$updateMessage = function (int $messageId, string $content) {
-    $index = $this->messages->search(function(Message $message) use ($messageId) {
-        return $message->id === $messageId;
-    });
 };
 
 $removeMessage = function (int $messageId) {
@@ -87,4 +83,6 @@ mount(function () {
 ">
     <livewire:friends.layout :friends="$this->friends" />
     @include('livewire.messages.container', ['messages' => $messages])
+
+    <livewire:friends.components.add :friends-ids="$this->friendsIds" />
 </div>

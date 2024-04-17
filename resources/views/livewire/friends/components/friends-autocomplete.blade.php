@@ -4,10 +4,10 @@ use function Livewire\Volt\{state, mount};
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\User;
 
-state(['login' => '', 'active' => false, 'users' => null, 'allUsers' => null]);
+state(['login' => '', 'active' => false, 'users' => null, 'allUsers' => null, 'friendsIds']);
 
 mount(function () {
-    $this->allUsers = User::orderBy('login')->get();
+    $this->allUsers = User::whereNotIn('id', $this->friendsIds)->orderBy('login')->get();
     $this->users = $this->allUsers;
 });
 

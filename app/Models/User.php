@@ -78,14 +78,6 @@ class User extends Authenticatable
         return $this->belongsToMany(Message::class, 'message_read');
     }
 
-    public function allTeams()
-    {
-        return $this->ownedTeams()
-            ->where('personal_team', false)
-            ->get()
-            ->sortBy('name');
-    }
-
     public function pendingFriendsTo(): BelongsToMany
     {
         return $this->friendsTo()->wherePivot('accepted', false);

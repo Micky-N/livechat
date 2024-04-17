@@ -1,6 +1,6 @@
 <?php
 
-use function Livewire\Volt\{state, form, on};
+use function Livewire\Volt\{state, form, on, computed};
 
 state(['isOpen' => false]);
 form(\App\Livewire\Forms\RoomForm::class);
@@ -32,6 +32,8 @@ $save = function () {
 
     $this->redirect(url()->previous());
 };
+
+$usersIds = computed(fn () => optional($this->form->room)->allUsers()->map(fn ($user) => $user->id));
 
 $removeMember = function (int $memberId) {
     $this->form->members = array_filter($this->form->members, function (\App\Models\User $formMember) use ($memberId) {
@@ -65,7 +67,7 @@ $removeMember = function (int $memberId) {
                         <div>
                             <label class="text-gray-600">Autocomplete
                                 Member</label>
-                            <livewire:rooms.components.members-autocomplete />
+                            <livewire:rooms.components.members-autocomplete :users-ids="$this->usersIds" />
                         </div>
                         <div>
                             <label for="members"

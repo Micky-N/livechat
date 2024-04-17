@@ -72,7 +72,7 @@ class Team extends JetstreamTeam implements Broadcastable
     {
         $channels = [new PrivateChannel('room.'.$this->id)];
         foreach ($this->users()->withPivot('silent')->get() as $user) {
-            if ($user->pivot->silent) {
+            if ($user->membership->silent) {
                 continue;
             }
             $channels[] = new PrivateChannel('App.Models.User.'.$user->id);
