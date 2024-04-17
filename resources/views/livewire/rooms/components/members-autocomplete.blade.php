@@ -1,8 +1,7 @@
 <?php
 
-use function Livewire\Volt\{state, mount};
-use Illuminate\Database\Eloquent\Collection;
 use App\Models\User;
+use function Livewire\Volt\{mount, state};
 
 state(['login' => '', 'active' => false, 'members' => null, 'allMembers' => null, 'usersIds']);
 
@@ -36,17 +35,16 @@ $selectMember = function (User $member) {
     active: @entangle('active')
 }" x-init="$watch('login', login => $wire.autocomplete(login))">
     <div x-on:click.outside="$wire.activelist(false)">
-        <input type="text" x-model="login" x-on:click="$wire.activelist(true)"
-            class="block w-full min-w-0 flex-1 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-            placeholder="Type user login" />
+        <x-input type="text" x-model="login" x-on:click="$wire.activelist(true)"
+                 class="w-full" placeholder="Type user login"/>
         @if ($active && $members->count())
             <div class="relative">
-                <div class="top-100 absolute mt-1 w-full rounded-lg overflow-hidden border bg-white shadow-xl">
+                <div class="top-100 absolute mt-1 w-full rounded-lg overflow-hidden border border-neutral-600 bg-neutral-800 shadow-xl">
                     <div class="text-sm">
-                        <ul class="divide-y max-h-72 overflow-x-hidden rounded-lg">
+                        <ul class="divide-y divide-neutral-600 max-h-72 overflow-x-hidden rounded-lg">
                             @foreach ($members as $member)
                                 <li wire:click="selectMember({{ $member->id }})"
-                                    class="flex w-full cursor-pointer px-3 py-2 hover:bg-gray-100">
+                                    class="flex w-full cursor-pointer px-3 py-2 hover:bg-neutral-100">
                                     {{ $member->login }}
                                 </li>
                             @endforeach

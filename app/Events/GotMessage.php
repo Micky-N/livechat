@@ -8,6 +8,7 @@ class GotMessage extends AbstractMessageEvent
     {
         return [
             'id' => $this->message->id,
+            'notification' => $this->broadcaster->notification($this->message),
         ];
     }
 }

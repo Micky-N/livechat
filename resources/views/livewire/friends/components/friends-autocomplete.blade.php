@@ -37,16 +37,16 @@ $selectUser = function (User $user) {
 }" x-init="$watch('login', login => $wire.autocomplete(login))">
     <div x-on:click.outside="$wire.activelist(false)">
         <input type="text" x-model="login" x-on:click="$wire.activelist(true)"
-            class="block w-full min-w-0 flex-1 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            class="block w-full min-w-0 flex-1 rounded-lg border p-2.5 text-sm border-neutral-600 bg-neutral-700 text-white placeholder-neutral-400 focus:border-orange-500 focus:ring-orange-500"
             placeholder="Type user login" />
         @if ($active && $users->count())
             <div class="relative">
-                <div class="top-100 absolute mt-1 w-full overflow-hidden rounded-lg border bg-white shadow-xl">
+                <div class="top-100 absolute mt-1 w-full overflow-hidden rounded-lg border border-neutral-600 bg-neutral-800 shadow-xl">
                     <div class="text-sm">
-                        <ul class="divide-y max-h-72 overflow-x-hidden rounded-lg">
+                        <ul class="divide-y divide-neutral-600 max-h-72 overflow-x-hidden rounded-lg">
                             @foreach ($users as $user)
                                 <li wire:click="selectUser({{ $user->id }})"
-                                    class="flex w-full cursor-pointer px-3 py-2 hover:bg-gray-100">
+                                    class="flex w-full cursor-pointer px-3 py-2 hover:bg-neutral-100">
                                     {{ $user->login }}
                                 </li>
                             @endforeach

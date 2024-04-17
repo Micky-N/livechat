@@ -1,10 +1,10 @@
 <?php
 
 use App\Models\Message;
-use function Livewire\Volt\{computed, layout, mount, state, on};
+use function Livewire\Volt\{computed, layout, mount, on, state};
 
 layout('layouts.app');
-state(['room' => fn(\App\Models\Team $room) => $room, 'messages']);
+state(['room' => fn(\App\Models\Team $room) => $room, 'messages', 'usersConnected' => [auth()->id()]]);
 
 on([
     'delete-message' => function (\App\Models\Message $message) {
@@ -17,7 +17,16 @@ on([
 
         $message->delete();
         $this->resetMessages();
-    }
+    },
+    'here' => function (array $users) {
+        $this->usersConnected = array_map(fn (array $user) => $user['id'], $users);
+    },
+    'joining' => function (array $user) {
+        $this->usersConnected[] = $user['id'];
+    },
+    'leaving' => function (array $user) {
+        $this->usersConnected = array_filter($this->usersConnected, fn($u) => $u !== $user['id']);
+    },
 ]);
 
 $rooms = computed(fn() => auth()->user()->allTeams());
@@ -40,6 +49,14 @@ $addMessage = function (Message $newMessage) {
     $this->messages->prepend($newMessage);
 };
 
+$members = computed(function () {
+    return $this->room->users->sortBy('login')
+        ->map(function (\App\Models\User $user) {
+            $user->connected = in_array($user->id, $this->usersConnected);
+            return $user;
+        });
+});
+
 $removeMessage = function (int $messageId) {
     $this->resetMessages();
     $this->messages = $this->messages->filter(function (Message $message) use ($messageId) {
@@ -55,7 +72,20 @@ mount(function () {
 ?>
 
 <div class="h-full overflow-hidden bg-black/40" x-init="
-    Echo.private('room.{{ $room->id }}')
+    Echo.join('room.{{ $room->id }}')
+        .here((users) => {
+            $wire.$dispatch('here', {users});
+        })
+        .joining((user) => {
+            $wire.$dispatch('joining', {user});
+            console.log(user.login);
+        })
+        .leaving((user) => {
+            $wire.$dispatch('leaving', {user});
+        })
+        .error((error) => {
+            console.error(error);
+        })
         .listen('.got-message', (e) => {
             $wire.addMessage(e.id);
         })

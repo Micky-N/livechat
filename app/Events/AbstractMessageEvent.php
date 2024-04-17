@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Contracts\Broadcastable;
+use App\Contracts\Broadcaster;
 use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -14,28 +14,28 @@ abstract class AbstractMessageEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Broadcastable $broadcastable;
+    protected Broadcaster $broadcaster;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public Message $message)
+    public function __construct(protected Message $message)
     {
-        $this->broadcastable = $message->recipent;
+        $this->broadcaster = $message->recipent;
     }
 
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return array<int, Channel>
+     * @return Channel[]
      */
     public function broadcastOn(): array
     {
-        return $this->broadcastable->channels($this->message);
+        return $this->broadcaster->channels(static::class, $this->message);
     }
 
     public function broadcastAs(): string
     {
-        return $this->broadcastable->broadcastAs(static::class);
+        return $this->broadcaster->broadcastAs(static::class);
     }
 }

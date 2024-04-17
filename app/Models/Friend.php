@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Contracts\Broadcastable;
+use App\Contracts\Broadcaster;
 use App\Events\GotMessage;
 use App\Events\RemoveMessage;
 use App\Events\UpdateMessage;
@@ -10,13 +10,20 @@ use App\Traits\HasMessage;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Friend extends Pivot implements Broadcastable
+class Friend extends Pivot implements Broadcaster
 {
     use HasMessage;
 
     protected $table = 'friends';
 
     protected $fillable = ['id', 'user_id', 'friend_id', 'accepted'];
+
+    protected static function booted(): void
+    {
+        static::deleting(function (Friend $friend) {
+            $friend->messages()->delete();
+        });
+    }
 
     public function user()
     {
@@ -28,11 +35,20 @@ class Friend extends Pivot implements Broadcastable
         return $this->belongsTo(User::class, 'friend_id');
     }
 
-    protected function casts(): array
+    /**
+     * @return PrivateChannel[]
+     */
+    public function channels(string $event, Message $message): array
     {
-        return [
-            'accepted' => 'bool',
-        ];
+        return match ($event) {
+            GotMessage::class => [
+                new PrivateChannel('friend.'.$this->id),
+                new PrivateChannel('App.Models.User.'.$this->getOtherUser($message->sender)->id),
+            ],
+            UpdateMessage::class, RemoveMessage::class => [
+                new PrivateChannel('friend.'.$this->id),
+            ]
+        };
     }
 
     public function getOtherUser(User $user): User
@@ -44,17 +60,6 @@ class Friend extends Pivot implements Broadcastable
         return $this->user;
     }
 
-    /**
-     * @return PrivateChannel[]
-     */
-    public function channels(Message $message): array
-    {
-        return [
-            new PrivateChannel('friend.'.$this->id),
-            new PrivateChannel('App.Models.User.'.$this->getOtherUser($message->sender)->id),
-        ];
-    }
-
     public function broadcastAs(string $event): string
     {
         return match ($event) {
@@ -62,5 +67,22 @@ class Friend extends Pivot implements Broadcastable
             UpdateMessage::class => 'update-message',
             RemoveMessage::class => 'remove-message'
         };
+    }
+
+    public function notification(Message $message): array
+    {
+        return [
+            'url' => route('friends.messages', ['friend' => $this->id]),
+            'profile_photo_url' => $message->sender->profile_photo_url,
+            'login' => $message->sender->login,
+            'message' => 'Send a private message',
+        ];
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'accepted' => 'bool',
+        ];
     }
 }

@@ -42,15 +42,15 @@ $removeUser = function (int $userId) {
             <x-slot name="content">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-x-6 sm:gap-y-2 items-start">
                     <div>
-                        <label class="text-gray-600">Autocomplete
+                        <label class="text-neutral-300">Autocomplete
                             Friend</label>
                         <livewire:friends.components.friends-autocomplete :friends-ids="$this->friendsIds" />
                     </div>
                     <div>
                         <label for="friends"
-                            class="text-gray-600">Friends</label>
+                            class="text-neutral-300">Friends</label>
                         <div
-                            class="border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700 min-h-16 mb-3 flex flex-wrap items-start gap-2 rounded-lg text-xs border px-2 py-2">
+                            class="border-neutral-600 bg-neutral-700 min-h-16 mb-3 flex flex-wrap items-start gap-2 rounded-lg text-xs border px-2 py-2">
                             @forelse ($users as $user)
                                 <span
                                     class="border-orange-400 bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300 inline-flex items-center rounded-md border px-2 py-1 font-medium">
@@ -67,7 +67,7 @@ $removeUser = function (int $userId) {
                                     </button>
                                 </span>
                             @empty
-                                <span class="text-sm text-gray-500">empty ...</span>
+                                <span class="text-sm text-neutral-500">empty ...</span>
                             @endforelse
                         </div>
                     </div>
@@ -79,7 +79,7 @@ $removeUser = function (int $userId) {
                     wire:loading.attr="disabled">
                     {{ __('Save') }}
                     <div role="status" wire:loading wire:target="save()">
-                        <svg aria-hidden="true" class="w-4 h-4 ml-2 text-gray-200 animate-spin fill-orange-600"
+                        <svg aria-hidden="true" class="w-4 h-4 ml-2 text-neutral-200 animate-spin fill-orange-600"
                             viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"

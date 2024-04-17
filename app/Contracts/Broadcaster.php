@@ -5,15 +5,14 @@ namespace App\Contracts;
 use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
 
-/**
- * @property string $broadcastPrefix
- */
-interface Broadcastable
+interface Broadcaster
 {
     /**
      * @return Channel[]
      */
-    public function channels(Message $message): array;
+    public function channels(string $event, Message $message): array;
 
     public function broadcastAs(string $event): string;
+
+    public function notification(Message $message): array;
 }

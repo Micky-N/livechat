@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(\App\Models\Team::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(\App\Models\User::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->boolean('silent')->default(false);
+            $table->boolean('notify')->default(false);
             $table->string('role')->nullable();
             $table->timestamps();
 

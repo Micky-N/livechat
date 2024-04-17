@@ -14,5 +14,9 @@ Broadcast::channel('friend.{friend}', function (User $user, Friend $friend) {
 });
 
 Broadcast::channel('room.{room}', function (User $user, Team $room) {
-    return $room->members()->where('user_id', $user->id)->exists() || $room->user_id == $user->id;
+    if ($user->canJoinRoom($room)) {
+        return ['id' => $user->id, 'login' => $user->login];
+    }
+
+    return null;
 });

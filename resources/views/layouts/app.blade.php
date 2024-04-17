@@ -34,11 +34,16 @@
 </head>
 <body class="font-sans antialiased bg-left md:bg-center bg-cover"
       style="background-image: url('https://reverb.laravel.com/images/hero-background.png')"
-      :class="{ 'overflow-hidden': modalOpen }" x-data="{modalOpen: false}" x-init="
+      :class="{ 'overflow-hidden': modalOpen }" x-data="{
+            modalOpen: false,
+            currentRoute: '{{ request()->fullUrl() }}'
+        }" x-init="
         Echo.private('App.Models.User.{{ auth()->id() }}')
-        .listenToAll((event, data) => {
-            console.log(event, data)
-        });
+            .listenToAll((event, data) => {
+                if ('notification' in data && data.notification.url !== currentRoute) {
+                    $dispatch('notify', data.notification);
+                }
+            });
   ">
 <div class="flex h-screen">
     <x-sidebar-menu>
@@ -58,8 +63,6 @@
     <div class="flex h-screen w-full flex-col justify-between overflow-hidden">
         <!-- Navbar -->
         @livewire('navigation-menu')
-        <!-- /Navbar -->
-
         <!-- Main -->
         <main class="flex-1 overflow-auto md:rounded-tl-xl shadow bg-white/10">
             <!-- Put your content inside of the <main/> tag -->
@@ -67,6 +70,7 @@
         </main>
     </div>
 </div>
+<x-notification/>
 
 @stack('modals')
 

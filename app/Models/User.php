@@ -122,6 +122,11 @@ class User extends Authenticatable
         return $this->acceptedFriendsFrom->merge($this->acceptedFriendsTo);
     }
 
+    public function canJoinRoom(Team $room): bool
+    {
+        return $room->members()->where('user_id', $this->id)->exists() || $room->user_id == $this->id;
+    }
+
     /**
      * Get the attributes that should be cast.
      *

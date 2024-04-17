@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use App\Contracts\Broadcastable;
+use App\Contracts\Broadcaster;
 use App\Events\GotMessage;
 use App\Events\RemoveMessage;
 use App\Events\UpdateMessage;
 use App\Traits\HasMessage;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,7 +18,7 @@ use Laravel\Jetstream\Events\TeamUpdated;
 use Laravel\Jetstream\Jetstream;
 use Laravel\Jetstream\Team as JetstreamTeam;
 
-class Team extends JetstreamTeam implements Broadcastable
+class Team extends JetstreamTeam implements Broadcaster
 {
     use HasFactory;
     use HasMessage;
@@ -63,22 +64,30 @@ class Team extends JetstreamTeam implements Broadcastable
         static::deleting(function (Team $team) {
             $team->messages()->delete();
         });
+        static::created(function (Team $team) {
+            $team->members()->attach($team->user_id);
+        });
     }
 
     /**
      * @return PrivateChannel[]
      */
-    public function channels(Message $message): array
+    public function channels(string $event, Message $message): array
     {
-        $channels = [new PrivateChannel('room.'.$this->id)];
-        foreach ($this->users()->withPivot('silent')->get() as $user) {
+        $channels = [new PresenceChannel('room.'.$this->id)];
+        foreach ($this->users()->withPivot('notify')->get() as $user) {
             if ($user->membership->silent) {
                 continue;
             }
             $channels[] = new PrivateChannel('App.Models.User.'.$user->id);
         }
 
-        return $channels;
+        return match ($event) {
+            GotMessage::class => $channels,
+            UpdateMessage::class, RemoveMessage::class => [
+                new PresenceChannel('room.'.$this->id),
+            ]
+        };
     }
 
     public function broadcastAs(string $event): string
@@ -88,5 +97,15 @@ class Team extends JetstreamTeam implements Broadcastable
             UpdateMessage::class => 'update-message',
             RemoveMessage::class => 'remove-message'
         };
+    }
+
+    public function notification(Message $message): array
+    {
+        return [
+            'url' => route('rooms.messages', ['room' => $this->id]),
+            'profile_photo_url' => $message->sender->profile_photo_url,
+            'login' => $message->sender->login,
+            'message' => "Send a message in <span class='font-bold'>$this->name</span>",
+        ];
     }
 }

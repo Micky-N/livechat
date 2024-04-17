@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
         }
 
         foreach (Team::all() as $team) {
-            $usersId = [];
+            $usersId = [$team->user_id];
             for ($i = 0; $i < random_int(2, 6); $i++) {
                 $id = $users->random()->id;
                 while (in_array($id, $usersId)) {
