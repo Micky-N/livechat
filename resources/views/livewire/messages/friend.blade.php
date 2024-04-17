@@ -16,12 +16,13 @@ on([
                 $this->dispatch('remove-reply.' . $reply->id);
             }
         }
+        \App\Events\DeleteMessage::dispatch($message);
         $message->delete();
         $this->resetMessages();
     }
 ]);
 
-$friends = computed(fn() => auth()->user()->personalTeamUsers());
+$friends = computed(fn() => auth()->user()->friends());
 
 $send = function (string $content, int $replyTo = null) {
     $newMessage = $this->friend->messages()->create([
@@ -45,11 +46,23 @@ $resetMessages = function () {
         ->get()->merge($this->friend->messages()->where('user_id', auth()->id())->get())->sortByDesc('created_at');
 };
 
+$updateMessage = function (int $messageId, string $content) {
+    $index = $this->messages->search(function(Message $message) use ($messageId) {
+        return $message->id === $messageId;
+    });
+};
+
+$removeMessage = function (int $messageId) {
+    $this->resetMessages();
+    $this->messages = $this->messages->filter(function (Message $message) use ($messageId) {
+        return $message->id != $messageId;
+    });
+};
+
 mount(function () {
     $this->messages = auth()->user()->messages()
         ->where('user_id', $this->friend->id)
         ->get()->merge($this->friend->messages()->where('user_id', auth()->id())->get())->sortByDesc('created_at');
-
     $this->dispatch('user-with.' . $this->friend->id);
 });
 
@@ -59,6 +72,12 @@ mount(function () {
     Echo.channel('channel-name')
         .listen('.friend-got-message', (e) => {
             $wire.addMessage(e.id);
+        })
+        .listen('.update-message', (e) => {
+            $wire.$dispatch('update-message.' + e.id, {content: e.content});
+        })
+        .listen('.delete-message', (e) => {
+            $wire.removeMessage(e.id)
         })
 ">
     <livewire:friends.layout :friends="$this->friends" />

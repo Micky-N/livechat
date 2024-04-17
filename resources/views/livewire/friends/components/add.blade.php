@@ -3,7 +3,7 @@
 use function Livewire\Volt\{state, form, on};
 
 state(['isOpen' => false, 'friends' => []]);
-$form = form(\App\Livewire\Forms\RoomForm::class);
+form(\App\Livewire\Forms\RoomForm::class);
 
 on([
     'add-friends' => function () {
@@ -17,7 +17,7 @@ on([
 $save = function () {
     /** @var \App\Models\User $user */
     $user = auth()->user();
-    $user->personalTeam()->users()->syncWithoutDetaching(array_map(fn (\App\Models\User $friend) => $friend->id, $this->friends));
+    $user->pendingFriendsTo()->syncWithoutDetaching(array_map(fn (\App\Models\User $friend) => $friend->id, $this->friends));
     $message = 'Friends successfully added.';
     session()->flash('success', $message);
 

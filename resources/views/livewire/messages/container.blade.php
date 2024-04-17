@@ -103,7 +103,7 @@
                                 message.classList.remove('transition-all', 'duration-250', 'border-orange-500/20');
                             }, 4000)
                         }
-                    }" x-on:keydown.escape.window="messageToEdit = null"
+                    }"
                         class="chat-area relative flex-grow h-full w-full flex flex-col justify-between">
                         <div class="px-4 h-10 flex items-center justify-end lg:justify-center">
                             <h3 class="text-lg border-b border-orange-500 text-white inline-flex items-center">

@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Traits\HasMessage;
+use App\Traits\HasNoPersonalTeam;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -21,8 +22,11 @@ class User extends Authenticatable
     use HasApiTokens;
     use HasFactory;
     use HasMessage;
+    use HasNoPersonalTeam, HasTeams {
+        HasNoPersonalTeam::ownsTeam insteadof HasTeams;
+        HasNoPersonalTeam::isCurrentTeam insteadof HasTeams;
+    }
     use HasProfilePhoto;
-    use HasTeams;
     use Notifiable;
     use TwoFactorAuthenticatable;
 
@@ -61,19 +65,6 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-
     public function messages(): MorphMany
     {
         return $this->morphMany(Message::class, 'recipent');
@@ -93,8 +84,63 @@ class User extends Authenticatable
     {
         return $this->ownedTeams()
             ->where('personal_team', false)
-            ->get()->merge($this->teams()->where('personal_team', false)->get())
+            ->get()
             ->sortBy('name');
+    }
+
+    public function pendingFriendsTo(): BelongsToMany
+    {
+        return $this->friendsTo()->wherePivot('accepted', false);
+    }
+
+    public function friendsTo(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id')
+            ->withPivot('accepted')
+            ->withTimestamps();
+    }
+
+    public function pendingFriendsFrom(): BelongsToMany
+    {
+        return $this->friendsFrom()->wherePivot('accepted', false);
+    }
+
+    public function friendsFrom(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'friends', 'friend_id', 'user_id')
+            ->withPivot('accepted')
+            ->withTimestamps();
+    }
+
+    public function acceptedFriendsTo(): BelongsToMany
+    {
+        return $this->friendsTo()->wherePivot('accepted', true);
+    }
+
+    public function acceptedFriendsFrom(): BelongsToMany
+    {
+        return $this->friendsFrom()->wherePivot('accepted', true);
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function friends(): Collection
+    {
+        return $this->acceptedFriendsFrom->merge($this->acceptedFriendsTo);
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 
     protected function defaultProfilePhotoUrl(): string
@@ -104,15 +150,5 @@ class User extends Authenticatable
         })->join(' '));
 
         return 'https://ui-avatars.com/api/?name='.urlencode($name).'&color=7F9CF5&background=EBF4FF';
-    }
-
-    /**
-     * Get the user's "personal" team users.
-     *
-     * @return Collection<int, \App\Models\User>
-     */
-    public function personalTeamUsers(): Collection
-    {
-        return $this->personalTeam()->users()->whereNot('user_id', $this->id)->get();
     }
 }

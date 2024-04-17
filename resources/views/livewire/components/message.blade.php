@@ -9,21 +9,55 @@ $isMine = computed(fn() => $this->message->user_id == auth()->id());
 $replyTo = computed(fn() => $this->message->replyTo);
 
 on([
-    'update-message.{message.id}' => function () {
-        $this->message->content = trim($this->content);
-        $this->message->save();
+    'update-message.{message.id}' => function (string $content) {
+        $this->content = trim($content);
     },
     'remove-reply.{message.id}' => function () {
         $this->message->replyTo = null;
     }
 ]);
 
+$updateMessage = function () {
+    $this->message->content = trim($this->content);
+    $this->message->save();
+    \App\Events\UpdateMessage::dispatch($this->message);
+};
+
 mount(fn() => ($this->content = $this->message->content));
 
 ?>
 
 
-<div id="message-{{ $message->id }}" class="relative group hover:bg-black/40 py-0.5 px-8">
+<div id="message-{{ $message->id }}" class="relative group hover:bg-black/40 py-0.5 px-8" x-data="{
+                content: @entangle('content'),
+                oldContent: '{{ $message->content }}',
+                messageId: {{ $message->id }},
+                updateMessage(event) {
+                    if (event.keyCode === 13 && !event.shiftKey) {
+                        event.preventDefault();
+                        if (this.content.trim()) {
+                            $wire.updateMessage();
+                            this.messageToEdit = null;
+                        }
+                    }
+                },
+                activeEdit() {
+                    this.messageToEdit = this.messageId;
+                    setTimeout(() => {
+                        this.$refs.edit.focus()
+                    }, 0);
+                },
+                closeEdit() {
+                    this.content = this.oldContent;
+                    this.messageToEdit = null;
+                },
+                resize() {
+                    const textarea = this.$refs.edit;
+                    textarea.setAttribute('style', 'height:' + (textarea.scrollHeight) + 'px;overflow-y:hidden;');
+                    textarea.style.height = '0';
+                    textarea.style.height = (textarea.scrollHeight) + 'px';
+                }
+            }" x-on:keydown.escape.window="closeEdit()">
     @if ($this->replyTo)
         <div class="relative flex space-x-2.5 h-7 justify-between">
             <span class="absolute left-3 w-10 -top-1 text-neutral-600 flex justify-center">
@@ -55,7 +89,7 @@ mount(fn() => ($this->content = $this->message->content));
             <div class="flex justify-between items-end">
                 <div class="flex items-end space-x-2">
                     <span class="text-lg leading-none font-semibold text-white">{{ $message->sender->login }}</span>
-                    <span class="text-xs font-extralight text-gray-300">{{ $message->created_at }}</span>
+                    <span class="text-xs font-extralight text-gray-300">{{ $message->created_at->diffForHumans() }}</span>
                 </div>
                 <div x-show="messageToEdit != {{ $message->id }}"
                     class="items-center text-neutral-400 bg-neutral-800 top-0 hidden group-hover:flex absolute right-0 rounded-bl-md overflow-hidden">
@@ -68,7 +102,7 @@ mount(fn() => ($this->content = $this->message->content));
                         </svg>
                     </button>
                     @if ($this->isMine)
-                        <button type="button" x-on:click="messageToEdit = {{ $message->id }}"
+                        <button type="button" x-on:click="activeEdit()"
                             class="flex items-center justify-center w-10 h-7 hover:bg-slate-100/20 hover:text-gray-100">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                 class="w-5 h-5">
@@ -114,24 +148,12 @@ mount(fn() => ($this->content = $this->message->content));
                     @endif
                 </div>
             </div>
-            <div class="text-base font-extralight text-gray-200 pr-4" x-data="{
-                content: @entangle('content'),
-                messageId: {{ $message->id }},
-                updateMessage(event) {
-                    if (event.keyCode === 13 && !event.shiftKey) {
-                        event.preventDefault();
-                        if (this.content.trim()) {
-                            $wire.$dispatch('update-message.' + this.messageId);
-                            this.messageToEdit = null;
-                        }
-                    }
-                },
-            }">
+            <div class="text-base font-extralight text-gray-200 pr-4">
                 <span x-show="messageToEdit != messageId" x-text="content"></span>
                 <form x-show="messageToEdit == messageId" class="py-2">
-                    <label :for="$refs.chat" class="sr-only">Your message</label>
+                    <label :for="$refs.edit" class="sr-only">Your message</label>
                     <div class="flex items-center px-3 rounded-lg bg-neutral-800/40">
-                        <textarea x-ref="chat" rows="1" x-on:input="resize()" x-on:keydown="updateMessage($event)" x-model="content"
+                        <textarea x-ref="edit" rows="1" x-on:focus="resize()" x-on:input="resize()" x-on:keydown="updateMessage($event)" x-model="content"
                             class="block resize-none p-2 w-full text-base text-gray-100 placeholder-gray-400 bg-transparent rounded-lg border-0 focus:ring-0"
                             placeholder="Your message..."></textarea>
                     </div>

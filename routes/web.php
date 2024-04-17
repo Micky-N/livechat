@@ -14,6 +14,7 @@ Route::middleware([
 ])->group(function () {
     Volt::route('/rooms', 'rooms.index')->name('rooms.index');
     Volt::route('/friends', 'friends.index')->name('friends.index');
+    Volt::route('/requests', 'requests.index')->name('requests.index');
     Volt::route('/messages/rooms/{room}', 'messages.room')->name('rooms.messages');
     Volt::route('/messages/friends/{friend}', 'messages.friend')->name('friends.messages');
 });

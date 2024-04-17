@@ -9,7 +9,7 @@ state(['friends' => collect()]);
 mount(function () {
     /** @var \App\Models\User $user */
     $user = \Illuminate\Support\Facades\Auth::user();
-    $this->friends = $user->personalTeamUsers();
+    $this->friends = $user->friends();
 });
 
 ?>

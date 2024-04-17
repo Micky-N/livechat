@@ -17,20 +17,30 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->withPersonalTeam()
-            ->create();
+        User::factory(10)->create();
 
-        $me = User::factory()->withPersonalTeam()
-            ->create([
-                'name' => 'Test User',
-                'email' => 'test@example.com',
-            ]);
+        $me = User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]);
 
         $users = User::all();
         foreach ($users as $user) {
             Team::factory(2)->create([
                 'user_id' => $user->id,
             ]);
+
+            $random = random_int(0, 6);
+            $list = [];
+            for ($i = 0; $i < $random; $i++) {
+                $friendId = User::get()->random()->id;
+                if (! in_array($friendId, $list) && $user->id != $friendId) {
+                    $user->acceptedFriendsTo()->attach($friendId, [
+                        'accepted' => true,
+                    ]);
+                    $list[] = $friendId;
+                }
+            }
         }
 
         foreach (Team::all() as $team) {
@@ -54,7 +64,7 @@ class DatabaseSeeder extends Seeder
 
         for ($i = 0; $i < 20; $i++) {
             $message = new Message([
-                'user_id' => $me->personalTeamUsers()->random()->id,
+                'user_id' => $me->friends()->random()->id,
                 'content' => app(Generator::class)->paragraph(),
             ]);
             $me->messages()->save($message);
