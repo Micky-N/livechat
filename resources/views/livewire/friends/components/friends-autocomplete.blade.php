@@ -27,6 +27,7 @@ $autocomplete = function () {
 
 $selectUser = function (User $user) {
     $this->dispatch('add-user', user: $user->id);
+    $this->active = false;
 };
 
 ?>
@@ -46,7 +47,7 @@ $selectUser = function (User $user) {
                         <ul class="divide-y divide-neutral-600 max-h-72 overflow-x-hidden rounded-lg">
                             @foreach ($users as $user)
                                 <li wire:click="selectUser({{ $user->id }})"
-                                    class="flex w-full cursor-pointer px-3 py-2 hover:bg-neutral-100">
+                                    class="flex w-full cursor-pointer px-3 py-2 hover:bg-neutral-600">
                                     {{ $user->login }}
                                 </li>
                             @endforeach

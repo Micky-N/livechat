@@ -86,14 +86,14 @@ mount(function () {
         .error((error) => {
             console.error(error);
         })
-        .listen('.got-message', (e) => {
+        .listen('GotMessage', (e) => {
             $wire.addMessage(e.id);
         })
-        .listen('.update-message', (e) => {
+        .listen('UpdateMessage', (e) => {
             console.log(e);
             $wire.$dispatch('update-message.' + e.id, {content: e.content});
         })
-        .listen('.remove-message', (e) => {
+        .listen('RemoveMessage', (e) => {
             $wire.removeMessage(e.id)
         })
 ">

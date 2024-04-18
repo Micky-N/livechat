@@ -16,6 +16,11 @@ $handleRequest = function (string $answer) {
         auth()->user()->pendingFriendsFrom()->updateExistingPivot($this->request->id, [
             'accepted' => true
         ]);
+        $friend = auth()->user()->acceptedFriendsFrom()
+            ->where('user_id', $this->request->id)
+            ->withPivot('id')
+            ->first()->pivot;
+        \App\Events\AcceptFriendRequest::dispatch($friend);
         $message = 'Request has been accepted';
     } else if ($answer == 'reject') {
         auth()->user()->pendingFriendsFrom()->detach($this->request->id);

@@ -90,15 +90,6 @@ class Team extends JetstreamTeam implements Broadcaster
         };
     }
 
-    public function broadcastAs(string $event): string
-    {
-        return match ($event) {
-            GotMessage::class => 'got-message',
-            UpdateMessage::class => 'update-message',
-            RemoveMessage::class => 'remove-message'
-        };
-    }
-
     public function notification(Message $message): array
     {
         return [
@@ -106,6 +97,7 @@ class Team extends JetstreamTeam implements Broadcaster
             'profile_photo_url' => $message->sender->profile_photo_url,
             'login' => $message->sender->login,
             'message' => "Send a message in <span class='font-bold'>$this->name</span>",
+            'currentRoute' => true,
         ];
     }
 }

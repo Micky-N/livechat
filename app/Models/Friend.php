@@ -8,6 +8,7 @@ use App\Events\RemoveMessage;
 use App\Events\UpdateMessage;
 use App\Traits\HasMessage;
 use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class Friend extends Pivot implements Broadcaster
@@ -25,12 +26,12 @@ class Friend extends Pivot implements Broadcaster
         });
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function friend()
+    public function friend(): BelongsTo
     {
         return $this->belongsTo(User::class, 'friend_id');
     }
@@ -60,15 +61,6 @@ class Friend extends Pivot implements Broadcaster
         return $this->user;
     }
 
-    public function broadcastAs(string $event): string
-    {
-        return match ($event) {
-            GotMessage::class => 'got-message',
-            UpdateMessage::class => 'update-message',
-            RemoveMessage::class => 'remove-message'
-        };
-    }
-
     public function notification(Message $message): array
     {
         return [
@@ -76,6 +68,7 @@ class Friend extends Pivot implements Broadcaster
             'profile_photo_url' => $message->sender->profile_photo_url,
             'login' => $message->sender->login,
             'message' => 'Send a private message',
+            'currentRoute' => true,
         ];
     }
 

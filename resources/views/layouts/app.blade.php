@@ -40,8 +40,10 @@
         }" x-init="
         Echo.private('App.Models.User.{{ auth()->id() }}')
             .listenToAll((event, data) => {
-                if ('notification' in data && data.notification.url !== currentRoute) {
-                    $dispatch('notify', data.notification);
+                if ('notification' in data) {
+                    if (!data.notification.currentRoute || data.notification.url !== currentRoute) {
+                        $dispatch('notify', data.notification);
+                    }
                 }
             });
   ">

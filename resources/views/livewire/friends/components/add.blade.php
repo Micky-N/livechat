@@ -15,10 +15,18 @@ on([
 ]);
 
 $save = function () {
-    /** @var \App\Models\User $user */
-    $user = auth()->user();
-    $user->pendingFriendsTo()->syncWithoutDetaching(array_map(fn (\App\Models\User $u) => $u->id, $this->users));
-    $message = 'Friends successfully added.';
+    /** @var \App\Models\User $auth */
+    $auth = auth()->user();
+    $auth->pendingFriendsTo()->syncWithoutDetaching(array_map(fn (\App\Models\User $user) => $user->id, $this->users));
+    foreach ($this->users as $user) {
+        $friend = $auth->pendingFriendsTo()
+            ->where('friend_id', $user->id)
+            ->where('accepted', false)
+            ->withPivot('id')
+            ->first()->pivot;
+        \App\Events\SendFriendRequest::dispatch($friend);
+    }
+    $message = 'Friend requests successfully sent.';
     session()->flash('success', $message);
 
     $this->redirect(url()->previous());
@@ -53,10 +61,10 @@ $removeUser = function (int $userId) {
                             class="border-neutral-600 bg-neutral-700 min-h-16 mb-3 flex flex-wrap items-start gap-2 rounded-lg text-xs border px-2 py-2">
                             @forelse ($users as $user)
                                 <span
-                                    class="border-orange-400 bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300 inline-flex items-center rounded-md border px-2 py-1 font-medium">
+                                    class="border-orange-400 bg-orange-900 text-orange-300 inline-flex items-center rounded-md border px-2 py-1 font-medium">
                                     {{ $user->login }}
                                     <button type="button" wire:click='removeUser({{ $user->id }})'
-                                        class="text-orange-400 hover:bg-orange-300 hover:text-orange-900 dark:hover:bg-orange-800 dark:hover:text-orange-300 ms-2 inline-flex items-center rounded-sm bg-transparent p-1 text-sm">
+                                        class="text-orange-400 hover:bg-orange-800 hover:text-orange-300 ms-2 inline-flex items-center rounded-sm bg-transparent p-1 text-sm">
                                         <svg class="h-2 w-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                             fill="none" viewBox="0 0 14 14">
                                             <path stroke="currentColor" stroke-linecap="round"

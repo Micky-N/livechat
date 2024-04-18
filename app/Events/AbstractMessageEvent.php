@@ -33,9 +33,4 @@ abstract class AbstractMessageEvent implements ShouldBroadcast
     {
         return $this->broadcaster->channels(static::class, $this->message);
     }
-
-    public function broadcastAs(): string
-    {
-        return $this->broadcaster->broadcastAs(static::class);
-    }
 }

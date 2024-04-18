@@ -1,4 +1,5 @@
 <a
+    x-cloak
     x-on:notify.window="openNotify"
     x-data="{
         show: false,

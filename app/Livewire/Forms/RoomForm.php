@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Forms;
 
+use App\Events\AddToRoom;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -56,6 +57,14 @@ class RoomForm extends Form
             if (! in_array($oldUser->id, $membersIds)) {
                 $oldUser->sendedMessages()->where('recipent_id', $this->room->id)->where('recipent_type', Team::class)->delete();
             }
+        }
+
+        $newMembers = array_filter($membersIds, function (int $memberId) use ($oldUsers) {
+            return ! $oldUsers->contains($memberId);
+        });
+
+        foreach ($newMembers as $newMember) {
+            AddToRoom::dispatch($this->room, User::find($newMember));
         }
         $this->room->users()->sync($membersIds);
     }

@@ -70,14 +70,14 @@ mount(function () {
 
 <div class="h-full overflow-hidden bg-black/40" x-init="
     Echo.private('friend.{{ $friend->id }}')
-        .listen('.got-message', (e) => {
+        .listen('GotMessage', (e) => {
             $wire.addMessage(e.id);
         })
-        .listen('.update-message', (e) => {
+        .listen('UpdateMessage', (e) => {
             console.log(e);
             $wire.$dispatch('update-message.' + e.id, {content: e.content});
         })
-        .listen('.remove-message', (e) => {
+        .listen('RemoveMessage', (e) => {
             $wire.removeMessage(e.id)
         })
 ">

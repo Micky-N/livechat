@@ -12,7 +12,5 @@ interface Broadcaster
      */
     public function channels(string $event, Message $message): array;
 
-    public function broadcastAs(string $event): string;
-
     public function notification(Message $message): array;
 }
