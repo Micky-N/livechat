@@ -151,4 +151,8 @@ return [
         Features::updatePasswords(),
     ],
 
+    'redirects' => [
+        'login' => '/rooms',
+    ],
+
 ];

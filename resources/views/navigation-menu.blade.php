@@ -10,7 +10,7 @@
                             <x-slot name="trigger">
                                     <span class="inline-flex rounded-md">
                                     <button type="button"
-                                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-neutral-400 hover:text-white focus:outline-none focus:bg-neutral-700 focus:text-white active:bg-neutral-700 transition ease-in-out duration-150">
+                                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-neutral-200 focus:outline-none focus:bg-neutral-800 focus:text-white active:bg-neutral-800 transition ease-in-out duration-150">
                                         {{ Auth::user()->name }}
 
                                         <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -24,7 +24,7 @@
 
                             <x-slot name="content">
                                 <!-- Account Management -->
-                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                <div class="block px-4 py-2 text-xs text-neutral-200">
                                     {{ __('Manage Account') }}
                                 </div>
 
@@ -32,7 +32,7 @@
                                     {{ __('Profile') }}
                                 </x-dropdown-link>
 
-                                <div class="border-t border-gray-200 dark:border-gray-600"></div>
+                                <div class="border-t border-neutral-600"></div>
 
                                 <!-- Authentication -->
                                 <form method="POST" action="{{ route('logout') }}" x-data>

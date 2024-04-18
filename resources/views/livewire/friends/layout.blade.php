@@ -2,11 +2,16 @@
 
 use function Livewire\Volt\{state};
 
-state('friends');
+state(['friends', 'subtitle' => '']);
 
 ?>
 
 <div>
+    @if ($subtitle)
+        <x-slot:title>
+            {{ $subtitle }}
+        </x-slot:title>
+    @endif
     <x-slot:title-menu>
         @volt()
             <div class="flex items-center justify-between">

@@ -29,17 +29,9 @@
                                 @foreach ($this->members as $member)
                                     <div class="text-white flex items-center">
                                         <div class="flex-2">
-                                            <div class="w-8 h-8 relative">
-                                                <img class="w-8 h-8 rounded-full mx-auto"
-                                                     src="{{ $member->profile_photo_url }}" alt="{{ $member->login }}"/>
-                                                @if($member->connected)
-                                                    <span
-                                                        class="absolute w-4 h-4 bg-green-400 rounded-full -right-1 -bottom-1 border-2 border-white"></span>
-                                                @else
-                                                    <span
-                                                        class="absolute w-4 h-4 bg-red-400 rounded-full -right-1 -bottom-1 border-2 border-white"></span>
-                                                @endif
-                                            </div>
+                                            <img
+                                                class="w-8 h-8 @if($member->connected) outline outline-2 outline-offset-2 outline-green-500 @endif rounded-full mx-auto"
+                                                src="{{ $member->profile_photo_url }}" alt="{{ $member->login }}"/>
                                         </div>
                                         <div class="flex-1 px-2">
                                             <div class="truncate w-32">

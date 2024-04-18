@@ -81,7 +81,7 @@ mount(function () {
             $wire.removeMessage(e.id)
         })
 ">
-    <livewire:friends.layout :friends="$this->friends" />
+    <livewire:friends.layout :subtitle="$this->otherUser->login" :friends="$this->friends" />
     @include('livewire.messages.container', ['messages' => $messages])
 
     <livewire:friends.components.add :friends-ids="$this->friendsIds" />

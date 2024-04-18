@@ -4,6 +4,7 @@ use App\Models\Message;
 use function Livewire\Volt\{computed, layout, mount, on, state};
 
 layout('layouts.app');
+
 state(['room' => fn(\App\Models\Team $room) => $room, 'messages', 'usersConnected' => [auth()->id()]]);
 
 on([
@@ -19,7 +20,7 @@ on([
         $this->resetMessages();
     },
     'here' => function (array $users) {
-        $this->usersConnected = array_map(fn (array $user) => $user['id'], $users);
+        $this->usersConnected = array_map(fn(array $user) => $user['id'], $users);
     },
     'joining' => function (array $user) {
         $this->usersConnected[] = $user['id'];
@@ -97,6 +98,6 @@ mount(function () {
             $wire.removeMessage(e.id)
         })
 ">
-    <livewire:rooms.layout :rooms="$this->rooms"/>
+    <livewire:rooms.layout :subtitle="$room->name" :rooms="$this->rooms"/>
     @include('livewire.messages.container', ['messages' => $messages])
 </div>

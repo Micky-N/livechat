@@ -15,7 +15,7 @@ mount(function () {
 ?>
 
 <div>
-    <livewire:friends.layout :friends="$this->friends" />
+    <livewire:friends.layout subtitle="All friends" :friends="$this->friends" />
     <div class="p-6 lg:p-8">
         <ul class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             @foreach ($this->friends as $friend)

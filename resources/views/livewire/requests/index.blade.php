@@ -15,6 +15,9 @@ mount(function () {
 ?>
 
 <div>
+    <x-slot:title>
+        Friend request
+    </x-slot:title>
     <div class="p-6 lg:p-8">
         <div class="max-w-screen-xl mx-auto px-4 md:px-8">
             <div class="mt-12 shadow-sm border rounded-lg overflow-x-auto">
@@ -26,7 +29,7 @@ mount(function () {
                     </tr>
                     </thead>
                     <tbody class="text-neutral-100 divide-y">
-                    @foreach($requests as $request)
+                    @forelse($requests as $request)
                         <tr>
                             <td
                                 class="flex items-center gap-x-3 py-3 px-6 whitespace-nowrap"
@@ -40,12 +43,18 @@ mount(function () {
                             </td>
                             <td class="text-right py-3 px-6 whitespace-nowrap">
                                 <button wire:click="$dispatch('handle-request', {request: {{ $request->id }}})"
-                                   class="py-1.5 px-3 bg-white text-gray-600 hover:text-gray-500 duration-150 hover:bg-gray-100 rounded-lg">
+                                        class="py-1.5 px-3 bg-white text-gray-600 hover:text-gray-500 duration-150 hover:bg-gray-100 rounded-lg">
                                     Manage
                                 </button>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="2" class="text-center text-lg py-3">
+                                No friend request
+                            </td>
+                        </tr>
+                    @endforelse
                     </tbody>
                 </table>
             </div>
