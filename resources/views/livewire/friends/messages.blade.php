@@ -82,7 +82,7 @@ mount(function () {
         })
 ">
     <livewire:friends.layout :subtitle="$this->otherUser->login" :friends="$this->friends" />
-    @include('livewire.messages.container', ['messages' => $messages])
+    @include('livewire.components.messages-container', ['messages' => $messages])
 
     <livewire:friends.components.add :friends-ids="$this->friendsIds" />
 </div>

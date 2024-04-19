@@ -2,22 +2,21 @@
 
 namespace App\Events;
 
-use App\Models\Friend;
-use Illuminate\Broadcasting\Channel;
+use App\Models\TeamInvitation;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class AcceptFriendRequest implements ShouldBroadcast
+class AcceptRoomInvitation implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(private readonly Friend $friend)
+    public function __construct(private TeamInvitation $teamInvitation)
     {
         //
     }
@@ -25,23 +24,25 @@ class AcceptFriendRequest implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return array<int, Channel>
+     * @return array<int, \Illuminate\Broadcasting\Channel>
      */
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('App.Models.User.'.$this->friend->user_id),
+            new PrivateChannel('App.Models.User.'.$this->teamInvitation->user_id),
         ];
     }
 
     public function broadcastWith(): array
     {
+        $owner = $this->teamInvitation->team->owner;
+
         return [
             'notification' => [
-                'url' => route('friends.index'),
-                'profile_photo_url' => $this->friend->friend->profile_photo_url,
-                'login' => $this->friend->friend->login,
-                'message' => 'Accepted your friend request',
+                'url' => route('rooms.index'),
+                'profile_photo_url' => $owner->profile_photo_url,
+                'login' => $owner->login,
+                'message' => "Accepted your invitation for <span class='font-bold'>{$this->teamInvitation->team->name}</span>",
             ],
         ];
     }

@@ -99,5 +99,5 @@ mount(function () {
         })
 ">
     <livewire:rooms.layout :subtitle="$room->name" :rooms="$this->rooms"/>
-    @include('livewire.messages.container', ['messages' => $messages])
+    @include('livewire.components.messages-container', ['messages' => $messages])
 </div>

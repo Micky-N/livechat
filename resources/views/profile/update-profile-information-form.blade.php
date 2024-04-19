@@ -59,6 +59,13 @@
             <x-input-error for="name" class="mt-2" />
         </div>
 
+        <!-- Login -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="login" value="{{ __('Login') }}" />
+            <x-input id="login" type="text" class="mt-1 block w-full" wire:model="state.login" required autocomplete="login" />
+            <x-input-error for="login" class="mt-2" />
+        </div>
+
         <!-- Email -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="email" value="{{ __('Email') }}" />
@@ -82,6 +89,7 @@
             @endif
         </div>
     </x-slot>
+
 
     <x-slot name="actions">
         <x-action-message class="me-3" on="saved">

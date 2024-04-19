@@ -8,7 +8,7 @@
                     @if (isset($room))
                         <div :class="openGroup ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
                              x-on:click.outside="openGroup = false"
-                             class="sidebar transition absolute top-0 bottom-0 z-[1] lg:z-0 lg:static lg:flex w-min lg:w-1/4 flex-2 flex-col py-6 pl-4 pr-10 bg-black/90 lg:bg-black/40">
+                             class="sidebar transition absolute top-0 bottom-0 z-[1] lg:z-0 lg:static lg:flex w-max flex-2 flex-col py-6 pl-4 pr-10 bg-black/90 lg:bg-black/40">
                             <button type="button" x-on:click="openGroup = !openGroup"
                                     class="flex justify-center w-10 h-10 hover:bg-slate-100/20 hover:text-gray-100 items-center text-neutral-400 bg-slate-100/5 lg:hidden absolute -right-10 top-0 rounded-br-md overflow-hidden">
                                 <template x-if="!openGroup">
@@ -25,16 +25,14 @@
                                     </svg>
                                 </template>
                             </button>
-                            <div class="flex-1 h-full overflow-auto px-2 space-y-8">
+                            <div class="h-full flex-grow px-2 pt-4 space-y-8">
                                 @foreach ($this->members as $member)
                                     <div class="text-white flex items-center">
-                                        <div class="flex-2">
-                                            <img
-                                                class="w-8 h-8 @if($member->connected) outline outline-2 outline-offset-2 outline-green-500 @endif rounded-full mx-auto"
-                                                src="{{ $member->profile_photo_url }}" alt="{{ $member->login }}"/>
-                                        </div>
+                                        <img
+                                            class="w-8 h-8 @if($member->connected) outline outline-2 outline-offset-2 outline-green-500 @endif rounded-full"
+                                            src="{{ $member->profile_photo_url }}" alt="{{ $member->login }}"/>
                                         <div class="flex-1 px-2">
-                                            <div class="truncate w-32">
+                                            <div class="break-all w-32 sm:w-1/3 md:w-max xl:min-w-52">
                                                 <span class="">{{ $member->login }}</span>
                                             </div>
                                         </div>

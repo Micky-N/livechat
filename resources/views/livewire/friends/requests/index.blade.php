@@ -61,5 +61,5 @@ mount(function () {
         </div>
     </div>
 
-    <livewire:requests.form/>
+    <livewire:friends.requests.form/>
 </div>

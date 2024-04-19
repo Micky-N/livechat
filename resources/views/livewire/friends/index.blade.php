@@ -6,7 +6,7 @@ layout('layouts.app');
 
 state(['friends' => collect()]);
 
-$friendsIds = computed(fn () => auth()->user()->friends()->map(fn (\App\Models\User $friend) => $friend->id)->merge([auth()->id()]));
+$friendsIds = computed(fn () => auth()->user()->friends()->merge([auth()->user()])->map(fn (\App\Models\User $friend) => $friend->id));
 
 mount(function () {
     $this->friends = auth()->user()->friends()->map(fn (\App\Models\User $friend) => $friend->pivot);

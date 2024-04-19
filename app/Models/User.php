@@ -127,6 +127,11 @@ class User extends Authenticatable
         return $room->members()->where('user_id', $this->id)->exists() || $room->user_id == $this->id;
     }
 
+    public function teamInvitations(): HasMany
+    {
+        return $this->hasMany(TeamInvitation::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

@@ -38,7 +38,7 @@ class SendFriendRequest implements ShouldBroadcast
     {
         return [
             'notification' => [
-                'url' => route('requests.index'),
+                'url' => route('friends.requests.index'),
                 'profile_photo_url' => $this->friend->user->profile_photo_url,
                 'login' => $this->friend->user->login,
                 'message' => 'Sent you a friend request',

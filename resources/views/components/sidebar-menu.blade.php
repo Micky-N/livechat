@@ -1,5 +1,6 @@
 @php
-    $countRequests = auth()->user()->pendingFriendsFrom()->count();
+    $countFriendRequests = auth()->user()->pendingFriendsFrom()->count();
+    $countRoomsInvitations = auth()->user()->ownedTeams()->withCount('teamInvitations')->get()->sum('team_invitations_count');
 @endphp
 <div x-data="{ sidebarOpen: false }">
     <div x-on:click="sidebarOpen = false" :class="sidebarOpen ? 'fixed' : 'hidden'"
@@ -47,6 +48,20 @@
                         Rooms
                     </a>
 
+                    <a href="{{ route('rooms.invitations.index') }}"
+                       class="flex cursor-pointer items-center {{ request()->routeIs('rooms.invitations.*') ? 'border-l-4 text-orange-400' : 'text-white' }} border-l-orange-400 py-3 px-8 pr-4 text-sm font-medium outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-orange-400 hover:text-orange-400 focus:border-l-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="mr-4 h-5 w-5 align-middle">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"/>
+                        </svg>
+                        Room invitations
+                        @if ($countRoomsInvitations)
+                            <span
+                                class="ml-auto rounded-full bg-orange-500 px-2 text-xs text-white">{{ $countRoomsInvitations }}</span>
+                        @endif
+                    </a>
+
                     <a href="{{ route('friends.index') }}"
                        class="flex cursor-pointer items-center {{ request()->routeIs('friends.*') ? 'border-l-4 text-orange-400' : 'text-white' }} border-l-orange-400 py-3 px-4 text-sm font-medium outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-orange-400 hover:text-orange-400 focus:border-l-4">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -57,18 +72,17 @@
                         Friends
                     </a>
 
-                    <a href="{{ route('requests.index') }}"
-                       class="flex cursor-pointer items-center {{ request()->routeIs('requests.*') ? 'border-l-4 text-orange-400' : 'text-white' }} border-l-orange-400 py-3 px-4 text-sm font-medium outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-orange-400 hover:text-orange-400 focus:border-l-4">
+                    <a href="{{ route('friends.requests.index') }}"
+                       class="flex cursor-pointer items-center {{ request()->routeIs('friends.requests.*') ? 'border-l-4 text-orange-400' : 'text-white' }} border-l-orange-400 py-3 px-8 pr-4 text-sm font-medium outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-orange-400 hover:text-orange-400 focus:border-l-4">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                              stroke="currentColor" class="mr-4 h-5 w-5 align-middle">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                   d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"/>
                         </svg>
-
                         Friend requests
-                        @if ($countRequests)
+                        @if ($countFriendRequests)
                             <span
-                                class="ml-auto rounded-full bg-orange-500 px-2 text-xs text-white">{{ $countRequests }}</span>
+                                class="ml-auto rounded-full bg-orange-500 px-2 text-xs text-white">{{ $countFriendRequests }}</span>
                         @endif
                     </a>
 

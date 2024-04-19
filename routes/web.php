@@ -13,8 +13,9 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Volt::route('/rooms', 'rooms.index')->name('rooms.index');
+    Volt::route('/rooms/invitations', 'rooms.invitations.index')->name('rooms.invitations.index');
+    Volt::route('/rooms/{room}/messages', 'rooms.messages')->name('rooms.messages');
     Volt::route('/friends', 'friends.index')->name('friends.index');
-    Volt::route('/requests', 'requests.index')->name('requests.index');
-    Volt::route('/messages/rooms/{room}', 'messages.room')->name('rooms.messages');
-    Volt::route('/messages/friends/{friend}', 'messages.friend')->name('friends.messages');
+    Volt::route('/friends/requests', 'friends.requests.index')->name('friends.requests.index');
+    Volt::route('/friends/{friend}/messages', 'friends.messages')->name('friends.messages');
 });

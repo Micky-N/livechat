@@ -14,7 +14,7 @@ class TeamInvitation extends JetstreamTeamInvitation
      * @var array<int, string>
      */
     protected $fillable = [
-        'email',
+        'user_id',
         'role',
     ];
 
@@ -24,5 +24,10 @@ class TeamInvitation extends JetstreamTeamInvitation
     public function team(): BelongsTo
     {
         return $this->belongsTo(Jetstream::teamModel());
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(Jetstream::userModel());
     }
 }
