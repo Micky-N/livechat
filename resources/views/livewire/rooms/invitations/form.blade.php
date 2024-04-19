@@ -21,7 +21,7 @@ $handleRequest = function (string $answer) {
         $this->request->delete();
         $message = 'Request has been rejected';
     }
-    session()->flash('success', $message);
+    session()->flash('flash.banner', $message);
 
     $this->redirect(url()->previous());
 };

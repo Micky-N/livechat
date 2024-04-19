@@ -27,7 +27,7 @@ $save = function () {
         \App\Events\SendFriendRequest::dispatch($friend);
     }
     $message = 'Friend requests successfully sent.';
-    session()->flash('success', $message);
+    session()->flash('flash.banner', $message);
 
     $this->redirect(url()->previous());
 };

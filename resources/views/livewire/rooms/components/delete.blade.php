@@ -22,7 +22,7 @@ $removeRoom = function () {
         $this->room->users()->detach(auth()->id());
         $message = 'Room successfully left.';
     }
-    session()->flash('success', $message);
+    session()->flash('flash.banner', $message);
 
     $this->redirect(url()->previous());
 };

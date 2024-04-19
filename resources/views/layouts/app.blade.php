@@ -32,7 +32,7 @@
         }
     </style>
 </head>
-<body class="font-sans antialiased bg-left md:bg-center bg-cover"
+<body x-cloak class="font-sans antialiased bg-left md:bg-center bg-cover"
       style="background-image: url('https://reverb.laravel.com/images/hero-background.png')"
       :class="{ 'overflow-hidden': modalOpen }" x-data="{
             modalOpen: false,
@@ -66,7 +66,8 @@
         <!-- Navbar -->
         @livewire('navigation-menu')
         <!-- Main -->
-        <main class="flex-1 overflow-auto md:rounded-tl-xl shadow bg-white/10">
+        <main class="flex-1 overflow-auto md:rounded-tl-xl shadow bg-white/10 relative">
+            <x-banner />
             <!-- Put your content inside of the <main/> tag -->
             {{ $slot }}
         </main>

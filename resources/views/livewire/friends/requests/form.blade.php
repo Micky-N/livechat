@@ -27,7 +27,7 @@ $handleRequest = function (string $answer) {
         $message = 'Request has been rejected';
     }
     $message = 'Friend successfully removed.';
-    session()->flash('success', $message);
+    session()->flash('flash.banner', $message);
 
     $this->redirect(url()->previous());
 };

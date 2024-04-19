@@ -18,7 +18,7 @@
                 ...event.detail
             };
             setTimeout(() => this.show = true, 200);
-            setTimeout(() => this.resetData(), 5000);
+            setTimeout(() => this.resetData(), 8000);
         },
         resetData() {
             this.show = false;

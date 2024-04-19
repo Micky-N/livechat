@@ -21,7 +21,7 @@ $save = function () {
         'user_id' => auth()->id()
     ]);
     \App\Events\SendRoomInvitation::dispatch($teamInvitation);
-    session()->flash('success', 'Invitation successfully sent');
+    session()->flash('flash.banner', 'Invitation successfully sent');
 
     $this->redirect(url()->previous());
 };

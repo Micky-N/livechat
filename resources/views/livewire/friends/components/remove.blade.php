@@ -20,7 +20,7 @@ $removeFriend = function () {
     $this->friend->messages()->delete();
     $this->friend->delete();
     $message = 'Friend successfully removed.';
-    session()->flash('success', $message);
+    session()->flash('flash.banner', $message);
 
     $this->redirect(url()->previous());
 };

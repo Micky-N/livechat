@@ -1,18 +1,26 @@
 @props(['style' => session('flash.bannerStyle', 'success'), 'message' => session('flash.banner')])
 
-<div x-data="{{ json_encode(['show' => true, 'style' => $style, 'message' => $message]) }}"
-            :class="{ 'bg-indigo-500': style == 'success', 'bg-red-700': style == 'danger', 'bg-gray-500': style != 'success' && style != 'danger' }"
-            style="display: none;"
-            x-show="show && message"
-            x-on:banner-message.window="
-                style = event.detail.style;
-                message = event.detail.message;
-                show = true;
-            ">
+<div
+    x-cloak
+    x-data="{{ json_encode(['show' => true, 'style' => $style, 'message' => $message]) }}"
+    :class="{ 'border-green-500': style == 'success', 'border-red-700': style == 'danger' }"
+    class="bg-black/90 border-b-2 absolute top-2 z-10 w-10/12 left-1/2 -translate-x-1/2 rounded-xl"
+    x-show="show && message"
+    x-transition:enter="transition-opacity ease-out duration-300"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition-opacity ease-in duration-300"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    x-on:banner-message.window="
+        style = event.detail.style;
+        message = event.detail.message;
+        show = true;
+    ">
     <div class="max-w-screen-xl mx-auto py-2 px-3 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between flex-wrap">
             <div class="w-0 flex-1 flex items-center min-w-0">
-                <span class="flex p-2 rounded-lg" :class="{ 'bg-indigo-600': style == 'success', 'bg-red-600': style == 'danger' }">
+                <span class="flex p-2 rounded-lg" :class="{ 'bg-green-600': style == 'success', 'bg-red-600': style == 'danger' }">
                     <svg x-show="style == 'success'" class="h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -31,7 +39,7 @@
                 <button
                     type="button"
                     class="-me-1 flex p-2 rounded-md focus:outline-none sm:-me-2 transition"
-                    :class="{ 'hover:bg-indigo-600 focus:bg-indigo-600': style == 'success', 'hover:bg-red-600 focus:bg-red-600': style == 'danger' }"
+                    :class="{ 'hover:bg-green-600 focus:bg-green-600': style == 'success', 'hover:bg-red-600 focus:bg-red-600': style == 'danger' }"
                     aria-label="Dismiss"
                     x-on:click="show = false">
                     <svg class="h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
