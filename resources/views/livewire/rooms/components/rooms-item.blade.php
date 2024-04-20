@@ -59,9 +59,8 @@ mount(function () {
                         class="text-orange-400 font-bold">{{ $room->users()->count() }}</span>
                 </p>
                 @if ($room->messages()->count())
-                    <p class="w-max">Unread messages: <span class="text-orange-400 font-bold">
-                            {{ $room->unReadMessages()->count() }} /
-                            {{ $room->messages()->count() }} messages</span>
+                    <p class="w-max">
+                        Unread messages: <span class="text-orange-400 font-bold">{{ $room->unReadMessages()->count() }}</span>
                     </p>
                 @endif
             </div>
