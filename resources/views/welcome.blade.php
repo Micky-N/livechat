@@ -11,6 +11,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet"/>
+    @livewireStyles
 </head>
 <body class="leading-normal tracking-normal text-white bg-cover bg-fixed relative"
       style="background-image: url('https://static.vecteezy.com/system/resources/previews/005/869/731/non_2x/dark-orange-colorful-blur-background-vector.jpg');">
@@ -31,6 +32,46 @@
                             >
                                 Rooms
                             </a>
+                            <div class="relative">
+                                <x-dropdown align="right" width="48">
+                                    <x-slot name="trigger">
+                                        <span class="inline-flex rounded-md">
+                                            <button type="button"
+                                                    class="flex items-center rounded-md px-3 py-2 ring-1 ring-transparent transition focus:outline-none text-white hover:text-white/80 focus:ring-orange-700">
+                                                {{ Auth::user()->name }}
+
+                                                <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                          d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+                                                </svg>
+                                            </button>
+                                        </span>
+                                    </x-slot>
+
+                                    <x-slot name="content">
+                                        <!-- Account Management -->
+                                        <div class="block px-4 py-2 text-xs text-neutral-200">
+                                            {{ __('Manage Account') }}
+                                        </div>
+
+                                        <x-dropdown-link href="{{ route('profile.show') }}">
+                                            {{ __('Profile') }}
+                                        </x-dropdown-link>
+
+                                        <div class="border-t border-neutral-600"></div>
+
+                                        <!-- Authentication -->
+                                        <form method="POST" action="{{ route('logout') }}" x-data>
+                                            @csrf
+                                            <x-dropdown-link href="{{ route('logout') }}"
+                                                             @click.prevent="$root.submit();">
+                                                {{ __('Log Out') }}
+                                            </x-dropdown-link>
+                                        </form>
+                                    </x-slot>
+                                </x-dropdown>
+                            </div>
                         @else
                             <a
                                 href="{{ route('login') }}"
@@ -58,11 +99,12 @@
     <div class="container pt-24 mx-auto flex flex-wrap flex-col md:flex-row items-center">
         <!--Left Col-->
         <div class="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden">
-            <h1 class="my-4 text-3xl md:text-9xl opacity-75 font-bold leading-tight text-center md:text-left bg-clip-text text-transparent bg-gradient-to-r from-orange-200 via-orange-400 to-orange-500">
+            <h1 class="my-4 text-7xl md:text-9xl opacity-75 font-bold leading-tight text-center md:text-left bg-clip-text text-transparent bg-gradient-to-r from-orange-200 via-orange-400 to-orange-500">
                 LiveChat
             </h1>
             <p class="leading-normal text-base md:text-2xl mb-8 text-center md:text-left">
-                Connect with friends in real-time with our dynamic chat room platform, where you can effortlessly engage in lively conversations, and stay connected anytime, anywhere.
+                Connect with friends in real-time with our dynamic chat room platform, where you can effortlessly engage
+                in lively conversations, and stay connected anytime, anywhere.
             </p>
         </div>
 
@@ -72,10 +114,13 @@
                 <img alt="mockup"
                      class="mx-auto w-full md:w-4/5 transform -rotate-6 transition group-hover:scale-105 duration-700 ease-in-out group-hover:rotate-6"
                      src="{{ asset('mockup.png') }}"/>
-                <a href="{{ route('register') }}" class="opacity-0 group-hover:opacity-100 group-hover:rotate-0 transform -rotate-6 transition-[opacity,transform] duration-700 text-xl sm:text-3xl font-bold px-6 py-3 rounded-xl bg-orange-700/60 hover:bg-orange-500 text-white absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">Join Now</a>
+                <a href="{{ route('register') }}"
+                   class="opacity-0 group-hover:opacity-100 group-hover:rotate-0 transform -rotate-6 transition-[opacity,transform] duration-700 text-xl sm:text-3xl font-bold px-6 py-3 rounded-xl bg-orange-700/60 hover:bg-orange-500 text-white absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">Join
+                    Now</a>
             </div>
         </div>
     </div>
 </div>
 </body>
+@livewireScripts
 </html>
