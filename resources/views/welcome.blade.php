@@ -72,7 +72,7 @@
                 <img alt="mockup"
                      class="mx-auto w-full md:w-4/5 transform -rotate-6 transition group-hover:scale-105 duration-700 ease-in-out group-hover:rotate-6"
                      src="{{ asset('mockup.png') }}"/>
-                <a href="{{ route('login') }}" class="opacity-0 group-hover:opacity-100 group-hover:rotate-0 transform -rotate-6 transition-[opacity,transform] duration-700 text-3xl font-bold px-6 py-3 rounded-xl bg-orange-700/60 hover:bg-orange-500 text-white absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">Join Now</a>
+                <a href="{{ route('register') }}" class="opacity-0 group-hover:opacity-100 group-hover:rotate-0 transform -rotate-6 transition-[opacity,transform] duration-700 text-3xl font-bold px-6 py-3 rounded-xl bg-orange-700/60 hover:bg-orange-500 text-white absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">Join Now</a>
             </div>
         </div>
     </div>
