@@ -6,8 +6,6 @@ layout('layouts.app');
 
 state(['friends' => collect()]);
 
-$friendsIds = computed(fn () => auth()->user()->friends()->merge([auth()->user()])->map(fn (\App\Models\User $friend) => $friend->id));
-
 mount(function () {
     $this->friends = auth()->user()->friends()->map(fn (\App\Models\User $friend) => $friend->pivot);
 });
@@ -23,8 +21,6 @@ mount(function () {
             @endforeach
         </ul>
     </div>
-
-    <livewire:friends.components.add :friends-ids="$this->friendsIds" />
 
     <livewire:friends.components.remove />
 </div>

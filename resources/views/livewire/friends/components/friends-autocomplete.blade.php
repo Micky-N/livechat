@@ -1,15 +1,18 @@
 <?php
 
-use function Livewire\Volt\{state, mount};
+use function Livewire\Volt\{state, mount, computed};
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\User;
 
-state(['login' => '', 'active' => false, 'users' => null, 'allUsers' => null, 'friendsIds']);
+state(['login' => '', 'active' => false, 'users' => null, 'allUsers' => null]);
+
+$friendsIds = computed(fn () => auth()->user()->friends()->merge([auth()->user()])->map(fn (\App\Models\User $friend) => $friend->id));
 
 mount(function () {
     $this->allUsers = User::whereNotIn('id', $this->friendsIds)->orderBy('login')->get();
     $this->users = $this->allUsers;
 });
+
 
 $activelist = function (bool $status = true) {
     $this->active = $status;

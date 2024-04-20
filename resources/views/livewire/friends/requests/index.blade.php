@@ -18,48 +18,42 @@ mount(function () {
     <x-slot:title>
         Friend request
     </x-slot:title>
-    <div class="p-6 lg:p-8">
-        <div class="max-w-screen-xl mx-auto px-4 md:px-8">
-            <div class="mt-12 shadow-sm border rounded-lg overflow-x-auto">
-                <table class="w-full table-auto text-sm text-left">
-                    <thead class="bg-neutral-950/75 text-gray-100 font-medium border-b">
-                    <tr>
-                        <th class="py-3 px-6">Requester</th>
-                        <th class="py-3 px-6"></th>
-                    </tr>
-                    </thead>
-                    <tbody class="text-neutral-100 divide-y">
-                    @forelse($requests as $request)
-                        <tr>
-                            <td
-                                class="flex items-center gap-x-3 py-3 px-6 whitespace-nowrap"
-                            >
-                                <img src="{{ $request->profile_photo_url }}" class="w-10 h-10 rounded-full"/>
-                                <div>
-                                    <span class="block text-sm font-medium">
-                                        {{ $request->login }}
-                                    </span>
-                                </div>
-                            </td>
-                            <td class="text-right py-3 px-6 whitespace-nowrap">
-                                <button wire:click="$dispatch('handle-request', {request: {{ $request->id }}})"
-                                        class="py-1.5 px-3 bg-white text-gray-600 hover:text-gray-500 duration-150 hover:bg-gray-100 rounded-lg">
-                                    Manage
-                                </button>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="2" class="text-center text-lg py-3">
-                                No friend request
-                            </td>
-                        </tr>
-                    @endforelse
-                    </tbody>
-                </table>
+    <div class="max-w-2xl mx-auto p-4">
+        <div class="items-start justify-between sm:flex">
+            <div>
+                <h4 class="text-neutral-200 text-xl font-semibold">Friends</h4>
+                <p class="mt-2 text-neutral-400 text-base sm:text-sm">List of your friends, you can make a friend
+                    request</p>
             </div>
+            <x-primary-button wire:click="$dispatch('add-friends')"
+               class="!py-1.5 mt-4 sm:mt-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6"/>
+                </svg>
+                Add friend
+            </x-primary-button>
         </div>
+        <ul class="mt-12 divide-y">
+            @forelse($requests as $request)
+                <li class="py-5 flex items-start justify-between">
+                    <div class="flex gap-3">
+                        <img src="{{ $request->profile_photo_url }}" alt="{{ $request->login }}" class="flex-none w-12 h-12 rounded-full"/>
+                        <div>
+                            <span class="block text-sm text-white font-semibold truncate break-all">{{ $request->login }}</span>
+                            <span class="block text-sm text-neutral-400 truncate">{{ $request->email }}</span>
+                        </div>
+                    </div>
+                    <button wire:click="$dispatch('handle-request', {request: {{ $request->id }}})"
+                       class="text-neutral-200 text-sm border rounded-lg px-3 py-2 duration-150 bg-neutral-800 hover:bg-neutral-900">Manage</button>
+                </li>
+            @empty
+                <p class="py-5 text-center text-white border-b">
+                    No friend
+                </p>
+            @endforelse
+        </ul>
     </div>
-
     <livewire:friends.requests.form/>
+    <livewire:friends.components.add/>
 </div>

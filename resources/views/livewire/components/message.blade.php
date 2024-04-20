@@ -28,7 +28,7 @@ mount(fn() => ($this->content = $this->message->content));
 ?>
 
 
-<div id="message-{{ $message->id }}" class="relative group hover:bg-black/40 py-0.5 px-8" x-data="{
+<div id="message-{{ $message->id }}" class="relative group hover:bg-black/40 py-0.5 px-4 sm:px-8" x-data="{
                 content: @entangle('content'),
                 oldContent: '{{ $message->content }}',
                 messageId: {{ $message->id }},
