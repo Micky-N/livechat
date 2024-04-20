@@ -48,6 +48,7 @@ $resetMessages = fn() => ($this->messages = $this->room->messages->sortByDesc('c
 
 $addMessage = function (Message $newMessage) {
     $this->messages->prepend($newMessage);
+    $this->dispatch('user-in-room.' . $this->room->id);
 };
 
 $members = computed(function () {

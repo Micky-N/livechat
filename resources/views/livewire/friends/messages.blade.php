@@ -44,6 +44,7 @@ $send = function (string $content, int $replyTo = null) {
 
 $addMessage = function (Message $newMessage) {
     $this->messages->prepend($newMessage);
+    $this->dispatch('user-with.' . $this->friend->id);
 };
 
 $resetMessages = function () {
