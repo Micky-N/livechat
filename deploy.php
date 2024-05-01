@@ -54,11 +54,6 @@ task('build:env', function () {
     writeln('Copied .env.{{environment}} to .env');
 })->desc('Create environment file');
 
-task('deploy:cleanup', function () {
-    $keep = get('keep_releases', 3) + 1;
-    run("cd {{deploy_path}}/releases && rm -rf $(ls -t | tail -n +$keep)");
-})->desc('Cleanup old releases');
-
 task('test', function () {
     run('ls -a');
     writeln('success');
